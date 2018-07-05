@@ -3,7 +3,7 @@
 # https://github.com/grpc/grpc/blob/master/examples/csharp/helloworld/generate_protos.bat
 
 NUGET_PATH=$HOME/.nuget
-TOOLS_PATH=$NUGET_PATH/packages/grpc.tools/1.13.0/tools/macosx_x64/
+TOOLS_PATH=$NUGET_PATH/packages/grpc.tools/1.11.1/tools/macosx_x64/
 PROTO_PATH=$GOPATH/src/github.com/hyperledger/fabric/protos
 TARGET_PATH=./protos
 
@@ -23,8 +23,6 @@ cp $PROTO_PATH/peer/chaincode_event.proto $TARGET_PATH/peer/
 cp $PROTO_PATH/peer/chaincode_shim.proto $TARGET_PATH/peer/
 cp $PROTO_PATH/peer/proposal.proto $TARGET_PATH/peer/
 cp $PROTO_PATH/peer/proposal_response.proto $TARGET_PATH/peer/
-
-# $TOOLS_PATH/protoc  --csharp_out Tendermint ./protos/types.proto --grpc_out Tendermint --plugin="protoc-gen-grpc=$TOOLS_PATH/grpc_csharp_plugin"
 
 $TOOLS_PATH/protoc \
 	-I=./protos \

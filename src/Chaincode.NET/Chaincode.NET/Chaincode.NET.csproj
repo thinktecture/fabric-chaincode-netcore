@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>7.3</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Grpc.Core" Version="1.11.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
@@ -14,6 +15,10 @@
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
       <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Chaincode.NET.Protos\Chaincode.NET.Protos.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,3 +1,6 @@
+using Chaincode.NET.Chaincode;
+using Chaincode.NET.Handler;
+using Chaincode.NET.Messaging;
 using Chaincode.NET.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +13,7 @@ namespace Chaincode.NET
         public static ServiceProvider Configure<TChaincode>(string[] args)
             where TChaincode : class, IChaincode
         {
-           var serviceCollection = new ServiceCollection();
+            var serviceCollection = new ServiceCollection();
 
             ConfigureLogging(serviceCollection);
             ConfigureSettings(serviceCollection, args);
@@ -19,11 +22,13 @@ namespace Chaincode.NET
             return serviceCollection.BuildServiceProvider();
         }
 
-        private static void ConfigureServices<TChaincode>(ServiceCollection serviceCollection) 
+        private static void ConfigureServices<TChaincode>(ServiceCollection serviceCollection)
             where TChaincode : class, IChaincode
         {
             serviceCollection.AddSingleton<Shim>();
             serviceCollection.AddSingleton<IChaincode, TChaincode>();
+            serviceCollection.AddSingleton<IMessageQueue, MessageQueue>();
+            serviceCollection.AddSingleton<ChaincodeStubFactory>();
         }
 
         private static void ConfigureSettings(ServiceCollection serviceCollection, string[] args)
@@ -39,11 +44,11 @@ namespace Chaincode.NET
 
         private static void ConfigureLogging(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton(new LoggerFactory()
-                .AddDebug()
-                .AddConsole()
+            serviceCollection.AddLogging(builder =>
+                builder.SetMinimumLevel(LogLevel.Trace)
+                    .AddDebug()
+                    .AddConsole()
             );
-            serviceCollection.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Trace));
         }
     }
 }
