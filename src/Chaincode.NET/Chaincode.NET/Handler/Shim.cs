@@ -83,6 +83,7 @@ namespace Chaincode.NET.Handler
             return (split[0], int.Parse(split[1]));
         }
 
+        public static Response Success() => Success(ByteString.Empty);
         public static Response Success(ByteString payload) => new Response()
         {
             Status = (int) ResponseCodes.Ok,

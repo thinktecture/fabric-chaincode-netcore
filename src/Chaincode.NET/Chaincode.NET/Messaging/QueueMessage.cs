@@ -8,11 +8,13 @@ namespace Chaincode.NET.Messaging
     {
         private readonly ChaincodeMessage _message;
         private readonly MessageMethod _method;
+        public Type GenericType { get; }
 
-        public QueueMessage(ChaincodeMessage message, MessageMethod method)
+        public QueueMessage(ChaincodeMessage message, MessageMethod method, Type genericType)
         {
             _message = message;
             _method = method;
+            GenericType = genericType;
         }
 
         public ChaincodeMessage Message => _message;
@@ -30,7 +32,7 @@ namespace Chaincode.NET.Messaging
         private readonly TaskCompletionSource<T> _taskCompletionSource;
 
         public QueueMessage(ChaincodeMessage message, MessageMethod method, TaskCompletionSource<T> taskCompletionSource)
-            : base(message, method)
+            : base(message, method, typeof(T))
         {
             _taskCompletionSource = taskCompletionSource;
         }

@@ -36,7 +36,7 @@ namespace Chaincode.NET.Chaincode
             using (var scope = _serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 return new ChaincodeStub(handler, channelId, txId, chaincodeInput, signedProposal,
-                    scope.ServiceProvider.GetRequiredService<ILogger<ChaincodeStub>>());    
+                    scope.ServiceProvider.GetRequiredService<ILogger<ChaincodeStub>>());
             }
         }
     }
@@ -61,7 +61,7 @@ namespace Chaincode.NET.Chaincode
         public MapField<string, ByteString> TransientMap { get; private set; }
         public string ChannelId { get; private set; }
         public string TxId { get; private set; }
-        public ICollection<string> Args { get; private set; }
+        public IList<string> Args { get; private set; }
 
         public SerializedIdentity Creator { get; private set; }
         // ReSharper restore MemberCanBePrivate.Global
@@ -86,6 +86,22 @@ namespace Chaincode.NET.Chaincode
             Args = chaincodeInput.Args.Select(entry => entry.ToStringUtf8()).ToList();
 
             DecodedSignedProposal = ValidateSignedProposal(signedProposal);
+        }
+
+        public ChaincodeFunctionParameterInformation GetFunctionAndParameters()
+        {
+            if (Args.Count < 1)
+            {
+                return null;
+            }
+
+            var result = new ChaincodeFunctionParameterInformation
+            {
+                Function = Args.First().ToLower(),
+                Parameters = Args.Skip(1).ToList() // TODO: For usage later wrap this into a class and provide nice methods for access
+            };
+
+            return result;
         }
 
         private DecodedSignedProposal ValidateSignedProposal(SignedProposal signedProposal)

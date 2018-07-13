@@ -55,7 +55,7 @@ namespace Chaincode.NET.Messaging
         private QueueMessage GetCurrentMessage(string messageTxContextId)
         {
             if (_txQueues.TryGetValue(messageTxContextId, out var messageQueue) &&
-                messageQueue.TryDequeue(out var message))
+                messageQueue.TryPeek(out var message))
             {
                 return message;
             }
@@ -83,16 +83,17 @@ namespace Chaincode.NET.Messaging
         {
             var messageTxContextId = response.ChannelId + response.Txid;
 
-            if (!(GetCurrentMessage(messageTxContextId) is QueueMessage<object> message))
-            {
-                return;
-            }
+            var message = GetCurrentMessage(messageTxContextId) as dynamic; // TODO: This needs to be done better
 
+            HandleResponseMessage(message, messageTxContextId, response);
+        }
+
+        private void HandleResponseMessage<T>(QueueMessage<T> message, string messageTxContextId, ChaincodeMessage response)
+        {
             try
             {
                 var parsedResponse = _handler.ParseResponse(response, message.Method);
-                // TODO: Do something with parsed response
-                message.Success(default);
+                message.Success((T) parsedResponse);
             }
             catch (Exception ex)
             {

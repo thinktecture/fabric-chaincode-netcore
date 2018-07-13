@@ -48,10 +48,11 @@ namespace Chaincode.NET.Handler
             _logger = logger;
 
             // TODO: Secure channel?
-            _client = new ChaincodeSupport.ChaincodeSupportClient(new Channel(host, port, ChannelCredentials.Insecure, new List<ChannelOption>()
-            {
-                new ChannelOption("request-timeout", 30000)
-            }));
+            _client = new ChaincodeSupport.ChaincodeSupportClient(new Channel(host, port, ChannelCredentials.Insecure,
+                new List<ChannelOption>()
+                {
+                    new ChannelOption("request-timeout", 3000000)
+                }));
             _messageQueue = new MessageQueue(this, messageQueueLogger);
         }
 
@@ -67,7 +68,7 @@ namespace Chaincode.NET.Handler
             // TODO: Write a message handler
 
             var state = States.Created;
-            
+
             await _stream.RequestStream.WriteAsync(conversationStarterMessage);
 
             await Task.Run(async () =>
@@ -95,13 +96,17 @@ namespace Chaincode.NET.Handler
                             {
                                 _logger.LogDebug($"[{message.ChannelId}-{message.Txid}], Received {message.Type}, " +
                                                  $"initializing chaincode");
-                                await HandleInit(message); // TODO: Maybe don't await?
+#pragma warning disable 4014
+                                HandleInit(message);
+#pragma warning restore 4014
                             }
                             else if (type == ChaincodeMessage.Types.Type.Transaction)
                             {
                                 _logger.LogDebug($"[{message.ChannelId}-{message.Txid}], Received {message.Type}, " +
                                                  $"invoking transaction on chaincode (state: {state})");
-                                await HandleTransaction(message); // TODO: Maybe don't await?
+#pragma warning disable 4014
+                                HandleTransaction(message);
+#pragma warning restore 4014
                             }
                             else
                             {
@@ -152,12 +157,12 @@ namespace Chaincode.NET.Handler
 
         private Task HandleTransaction(ChaincodeMessage message)
         {
-            return HandleMessage(message, HandleMessageAction.Init);
+            return HandleMessage(message, HandleMessageAction.Invoke);
         }
 
         private Task HandleInit(ChaincodeMessage message)
         {
-            return HandleMessage(message, HandleMessageAction.Invoke);
+            return HandleMessage(message, HandleMessageAction.Init);
         }
 
         private async Task HandleMessage(ChaincodeMessage message, HandleMessageAction action)
