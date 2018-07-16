@@ -223,13 +223,13 @@ namespace Chaincode.NET.Chaincode
         {
             _logger.LogInformation($"{nameof(GetState)} called with key: {key}");
 
-            return _handler.HandleGetState(key, ChannelId, TxId);
+            return _handler.HandleGetState(string.Empty, key, ChannelId, TxId);
         }
 
         public Task<ByteString> PutState(string key, ByteString value) =>
-            _handler.HandlePutState(key, value, ChannelId, TxId);
+            _handler.HandlePutState(string.Empty, key, value, ChannelId, TxId);
 
-        public Task<ByteString> DeleteState(string key) => _handler.HandleDeleteState(key, ChannelId, TxId);
+        public Task<ByteString> DeleteState(string key) => _handler.HandleDeleteState(string.Empty, key, ChannelId, TxId);
 
         // TODO: Correct return value
         public Task GetStateByRange(string startKey, string endKey)
@@ -239,11 +239,11 @@ namespace Chaincode.NET.Chaincode
                 startKey = EmptyKeySubstitute.ToString();
             }
 
-            return _handler.HandleGetStateByRange(startKey, endKey, ChannelId, TxId);
+            return _handler.HandleGetStateByRange(string.Empty, startKey, endKey, ChannelId, TxId);
         }
 
         // TODO: Correct return value
-        public Task GetQueryResult(string query) => _handler.HandleGetQueryResult(query, ChannelId, TxId);
+        public Task GetQueryResult(string query) => _handler.HandleGetQueryResult(string.Empty, query, ChannelId, TxId);
 
         // TODO: Correct return value
         public Task GetHistoryForKey(string key) => _handler.HandleGetHistoryForKey(key, ChannelId, TxId);
@@ -322,6 +322,38 @@ namespace Chaincode.NET.Chaincode
 
             return GetStateByRange(partialCompositeKey, partialCompositeKey + MaxUnicodeRuneValue);
         }
+
+        public Task<ByteString> GetPrivateData(string collection, string key) =>
+            _handler.HandleGetState(collection, key, ChannelId, TxId);
+        
+        public Task<ByteString> PutPrivateData(string collection, string key, ByteString value) =>
+            _handler.HandlePutState(collection, key, value, ChannelId, TxId);
+        
+        public Task<ByteString> DeletePrivateData(string collection, string key) =>
+            _handler.HandleDeleteState(collection, key, ChannelId, TxId);
+        
+        // TODO: Correct return value
+        public Task GetPrivateDataByRange(string collection, string startKey, string endKey)
+        {
+            if (string.IsNullOrEmpty(startKey))
+            {
+                startKey = EmptyKeySubstitute.ToString();
+            }
+            
+            return _handler.HandleGetStateByRange(collection, startKey, endKey, ChannelId, TxId);
+        }
+        
+        // TODO: Correct return value
+        public Task GetPrivateDataByPartialCompositeKey(string collection, string objectType, IList<string> attributes)
+        {
+            var partialCompositeKey = CreateCompositeKey(objectType, attributes);
+
+            return GetPrivateDataByRange(collection, partialCompositeKey, partialCompositeKey + MaxUnicodeRuneValue);
+        }
+        
+        // TODO: Correct return value
+        public Task GetPrivateDataQueryResult(string collection, string query) =>
+            _handler.HandleGetQueryResult(collection, query, ChannelId, TxId);
 
         private void ValidateCompositeKeyAttribute(string objectType)
         {

@@ -329,19 +329,30 @@ namespace Chaincode.NET.Handler
             throw new Exception(errorMessage);
         }
 
-        public Task<ByteString> HandleGetState(string key, string channelId, string txId)
+        public Task<ByteString> HandleGetState(string collection, string key, string channelId, string txId)
         {
-            var payload = new GetState() {Key = key};
+            var payload = new GetState()
+            {
+                Key = key,
+                Collection = collection
+            };
             return CreateMessageAndListen<ByteString>(MessageMethod.GetState, ChaincodeMessage.Types.Type.GetState,
                 payload, channelId, txId);
         }
 
-        public Task<ByteString> HandlePutState(string key, ByteString value, string channelId, string txId)
+        public Task<ByteString> HandlePutState(
+            string collection,
+            string key,
+            ByteString value,
+            string channelId,
+            string txId
+        )
         {
             var payload = new PutState()
             {
                 Key = key,
-                Value = value
+                Value = value,
+                Collection = collection
             };
 
             return CreateMessageAndListen<ByteString>(MessageMethod.PutState, ChaincodeMessage.Types.Type.PutState,
@@ -349,20 +360,31 @@ namespace Chaincode.NET.Handler
                 channelId, txId);
         }
 
-        public Task<ByteString> HandleDeleteState(string key, string channelId, string txId)
+        public Task<ByteString> HandleDeleteState(string collection, string key, string channelId, string txId)
         {
-            var payload = new DelState() {Key = key};
+            var payload = new DelState()
+            {
+                Key = key,
+                Collection = collection
+            };
 
             return CreateMessageAndListen<ByteString>(MessageMethod.DelState, ChaincodeMessage.Types.Type.DelState,
                 payload, channelId, txId);
         }
 
-        public Task HandleGetStateByRange(string startKey, string endKey, string channelId, string txId)
+        public Task HandleGetStateByRange(
+            string collection,
+            string startKey,
+            string endKey,
+            string channelId,
+            string txId
+        )
         {
             var payload = new GetStateByRange()
             {
                 StartKey = startKey,
-                EndKey = endKey
+                EndKey = endKey,
+                Collection = collection
             };
 
             // TODO: Correct result type
@@ -389,9 +411,13 @@ namespace Chaincode.NET.Handler
                 ChaincodeMessage.Types.Type.QueryStateClose, payload, channelId, txId);
         }
 
-        public Task HandleGetQueryResult(string query, string channelId, string txId)
+        public Task HandleGetQueryResult(string collection, string query, string channelId, string txId)
         {
-            var payload = new GetQueryResult() {Query = query};
+            var payload = new GetQueryResult()
+            {
+                Query = query,
+                Collection = collection
+            };
 
             // TODO: Correct result type
             return CreateMessageAndListen<object>(MessageMethod.GetQueryResult,
