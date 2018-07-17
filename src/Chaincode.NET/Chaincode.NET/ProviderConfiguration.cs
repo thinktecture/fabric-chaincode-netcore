@@ -28,7 +28,7 @@ namespace Chaincode.NET
             serviceCollection.AddSingleton<Shim>();
             serviceCollection.AddSingleton<IChaincode, TChaincode>();
             serviceCollection.AddSingleton<IMessageQueue, MessageQueue>();
-            serviceCollection.AddSingleton<ChaincodeStubFactory>();
+            serviceCollection.AddSingleton<IChaincodeStubFactory, ChaincodeStubFactory>();
         }
 
         private static void ConfigureSettings(ServiceCollection serviceCollection, string[] args)

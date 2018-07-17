@@ -15,7 +15,7 @@ namespace Chaincode.NET.Handler
     public class Shim
     {
         private readonly IChaincode _chaincode;
-        private readonly ChaincodeStubFactory _chaincodeStubFactory;
+        private readonly IChaincodeStubFactory _chaincodeStubFactory;
         private readonly ILogger<Shim> _logger;
         private readonly ILogger<Handler> _handlerLogger;
         private readonly ILogger<MessageQueue> _messageQueueLogger;
@@ -24,7 +24,7 @@ namespace Chaincode.NET.Handler
         public Shim(
             IChaincode chaincode,
             IOptions<ChaincodeSettings> chaincodeSettings,
-            ChaincodeStubFactory chaincodeStubFactory,
+            IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Shim> logger,
             ILogger<Handler> handlerLogger,
             ILogger<MessageQueue> messageQueueLogger

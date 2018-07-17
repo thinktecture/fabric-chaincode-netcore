@@ -17,7 +17,7 @@ using Protos;
 
 namespace Chaincode.NET.Chaincode
 {
-    public class ChaincodeStubFactory
+    public class ChaincodeStubFactory : IChaincodeStubFactory
     {
         private readonly IServiceProvider _serviceProvider;
 

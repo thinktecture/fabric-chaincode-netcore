@@ -25,7 +25,7 @@ namespace Chaincode.NET.Handler
         }
 
         private readonly IChaincode _chaincode;
-        private readonly ChaincodeStubFactory _chaincodeStubFactory;
+        private readonly IChaincodeStubFactory _chaincodeStubFactory;
         private readonly IMessageQueue _messageQueue;
         private readonly ILogger _logger;
         private readonly ChaincodeSupport.ChaincodeSupportClient _client;
@@ -38,7 +38,7 @@ namespace Chaincode.NET.Handler
             IChaincode chaincode,
             string host,
             int port,
-            ChaincodeStubFactory chaincodeStubFactory,
+            IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Handler> logger,
             ILogger<MessageQueue> messageQueueLogger
         )
