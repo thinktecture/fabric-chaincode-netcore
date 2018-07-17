@@ -6,18 +6,15 @@ namespace Chaincode.NET.Messaging
 {
     public class QueueMessage
     {
-        private readonly ChaincodeMessage _message;
-        private readonly MessageMethod _method;
-
         public QueueMessage(ChaincodeMessage message, MessageMethod method)
         {
-            _message = message;
-            _method = method;
+            Message = message;
+            Method = method;
         }
 
-        public ChaincodeMessage Message => _message;
-        public string MessageTxContextId => _message.ChannelId + _message.Txid;
-        public MessageMethod Method => _method;
+        public ChaincodeMessage Message { get; }
+        public string MessageTxContextId => Message.ChannelId + Message.Txid;
+        public MessageMethod Method { get; }
 
         public virtual void Fail(Exception exception)
         {
