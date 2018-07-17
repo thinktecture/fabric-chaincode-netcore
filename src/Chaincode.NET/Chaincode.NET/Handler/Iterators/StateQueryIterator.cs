@@ -1,4 +1,3 @@
-using Google.Protobuf;
 using Protos;
 using Queryresult;
 

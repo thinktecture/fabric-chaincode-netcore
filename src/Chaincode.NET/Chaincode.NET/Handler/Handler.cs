@@ -408,7 +408,12 @@ namespace Chaincode.NET.Handler
                 ChaincodeMessage.Types.Type.QueryStateClose, payload, channelId, txId);
         }
 
-        public Task<StateQueryIterator> HandleGetQueryResult(string collection, string query, string channelId, string txId)
+        public Task<StateQueryIterator> HandleGetQueryResult(
+            string collection,
+            string query,
+            string channelId,
+            string txId
+        )
         {
             var payload = new GetQueryResult()
             {

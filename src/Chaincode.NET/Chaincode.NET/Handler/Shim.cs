@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
-using Chaincode.NET.Messaging;
 using Chaincode.NET.Settings;
 using Google.Protobuf;
 using Grpc.Core;

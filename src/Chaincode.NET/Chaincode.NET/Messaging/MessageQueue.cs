@@ -88,7 +88,11 @@ namespace Chaincode.NET.Messaging
             HandleResponseMessage(message, messageTxContextId, response);
         }
 
-        private void HandleResponseMessage<T>(QueueMessage<T> message, string messageTxContextId, ChaincodeMessage response)
+        private void HandleResponseMessage<T>(
+            QueueMessage<T> message,
+            string messageTxContextId,
+            ChaincodeMessage response
+        )
         {
             try
             {

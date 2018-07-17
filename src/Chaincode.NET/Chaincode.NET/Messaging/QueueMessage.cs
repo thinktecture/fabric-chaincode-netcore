@@ -21,22 +21,26 @@ namespace Chaincode.NET.Messaging
             throw exception;
         }
     }
-    
+
     public class QueueMessage<T> : QueueMessage
     {
         private readonly TaskCompletionSource<T> _taskCompletionSource;
 
-        public QueueMessage(ChaincodeMessage message, MessageMethod method, TaskCompletionSource<T> taskCompletionSource)
+        public QueueMessage(
+            ChaincodeMessage message,
+            MessageMethod method,
+            TaskCompletionSource<T> taskCompletionSource
+        )
             : base(message, method)
         {
             _taskCompletionSource = taskCompletionSource;
         }
-        
+
         public void Success(T result)
         {
             _taskCompletionSource.SetResult(result);
         }
-        
+
         public override void Fail(Exception exception)
         {
             _taskCompletionSource.SetException(exception);

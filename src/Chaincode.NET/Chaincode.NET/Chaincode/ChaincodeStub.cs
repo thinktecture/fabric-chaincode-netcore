@@ -345,7 +345,7 @@ namespace Chaincode.NET.Chaincode
         public Task<StateQueryIterator> GetPrivateDataByRange(string collection, string startKey, string endKey)
         {
             ValidateCollection(collection);
-            
+
             if (string.IsNullOrEmpty(startKey))
             {
                 startKey = EmptyKeySubstitute.ToString();
