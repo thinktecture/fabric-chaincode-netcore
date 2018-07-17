@@ -372,7 +372,7 @@ namespace Chaincode.NET.Handler
                 payload, channelId, txId);
         }
 
-        public Task HandleGetStateByRange(
+        public Task<StateQueryIterator> HandleGetStateByRange(
             string collection,
             string startKey,
             string endKey,
@@ -387,8 +387,7 @@ namespace Chaincode.NET.Handler
                 Collection = collection
             };
 
-            // TODO: Correct result type
-            return CreateMessageAndListen<object>(MessageMethod.GetStateByRange,
+            return CreateMessageAndListen<StateQueryIterator>(MessageMethod.GetStateByRange,
                 ChaincodeMessage.Types.Type.GetStateByRange,
                 payload, channelId, txId);
         }
@@ -397,7 +396,6 @@ namespace Chaincode.NET.Handler
         {
             var payload = new QueryStateNext() {Id = id};
 
-            // TODO: Correct result type
             return CreateMessageAndListen<QueryResponse>(MessageMethod.QueryStateNext,
                 ChaincodeMessage.Types.Type.QueryStateNext, payload, channelId, txId);
         }
@@ -406,12 +404,11 @@ namespace Chaincode.NET.Handler
         {
             var payload = new QueryStateClose() {Id = id};
 
-            // TODO: Correct result type
             return CreateMessageAndListen<QueryResponse>(MessageMethod.QueryStateClose,
                 ChaincodeMessage.Types.Type.QueryStateClose, payload, channelId, txId);
         }
 
-        public Task HandleGetQueryResult(string collection, string query, string channelId, string txId)
+        public Task<StateQueryIterator> HandleGetQueryResult(string collection, string query, string channelId, string txId)
         {
             var payload = new GetQueryResult()
             {
@@ -419,29 +416,27 @@ namespace Chaincode.NET.Handler
                 Collection = collection
             };
 
-            // TODO: Correct result type
-            return CreateMessageAndListen<object>(MessageMethod.GetQueryResult,
+            return CreateMessageAndListen<StateQueryIterator>(MessageMethod.GetQueryResult,
                 ChaincodeMessage.Types.Type.GetQueryResult, payload, channelId, txId);
         }
 
-        public Task HandleGetHistoryForKey(string key, string channelId, string txId)
+        public Task<HistoryQueryIterator> HandleGetHistoryForKey(string key, string channelId, string txId)
         {
             var payload = new GetHistoryForKey() {Key = key};
 
-            // TODO: Correct result type
-            return CreateMessageAndListen<object>(MessageMethod.GetHistoryForKey,
+            return CreateMessageAndListen<HistoryQueryIterator>(MessageMethod.GetHistoryForKey,
                 ChaincodeMessage.Types.Type.GetHistoryForKey, payload, channelId, txId);
         }
 
         public async Task<Response> HandleInvokeChaincode(
             string chaincodeName,
-            byte[][] args,
+            IEnumerable<ByteString> args,
             string channelId,
             string txId
         )
         {
             var chaincodeId = new ChaincodeID() {Name = chaincodeName};
-            var inputArgs = new RepeatedField<ByteString>().Concat(args.AsEnumerable().Select(ByteString.CopyFrom));
+            var inputArgs = new RepeatedField<ByteString>().Concat(args);
 
             var chaincodeInput = new ChaincodeInput();
             chaincodeInput.Args.AddRange(inputArgs);

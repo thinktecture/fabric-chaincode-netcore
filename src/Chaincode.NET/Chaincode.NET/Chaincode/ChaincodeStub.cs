@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Chaincode.NET.Extensions;
 using Chaincode.NET.Handler;
+using Chaincode.NET.Handler.Iterators;
 using Common;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
@@ -98,7 +99,9 @@ namespace Chaincode.NET.Chaincode
             var result = new ChaincodeFunctionParameterInformation
             {
                 Function = Args.First().ToLower(),
-                Parameters = Args.Skip(1).ToList() // TODO: For usage later wrap this into a class and provide nice methods for access
+                Parameters =
+                    Args.Skip(1)
+                        .ToList() // TODO: For usage later wrap this into a class and provide nice methods for access
             };
 
             return result;
@@ -229,10 +232,10 @@ namespace Chaincode.NET.Chaincode
         public Task<ByteString> PutState(string key, ByteString value) =>
             _handler.HandlePutState(string.Empty, key, value, ChannelId, TxId);
 
-        public Task<ByteString> DeleteState(string key) => _handler.HandleDeleteState(string.Empty, key, ChannelId, TxId);
+        public Task<ByteString> DeleteState(string key) =>
+            _handler.HandleDeleteState(string.Empty, key, ChannelId, TxId);
 
-        // TODO: Correct return value
-        public Task GetStateByRange(string startKey, string endKey)
+        public Task<StateQueryIterator> GetStateByRange(string startKey, string endKey)
         {
             if (string.IsNullOrEmpty(startKey))
             {
@@ -242,20 +245,19 @@ namespace Chaincode.NET.Chaincode
             return _handler.HandleGetStateByRange(string.Empty, startKey, endKey, ChannelId, TxId);
         }
 
-        // TODO: Correct return value
-        public Task GetQueryResult(string query) => _handler.HandleGetQueryResult(string.Empty, query, ChannelId, TxId);
+        public Task<StateQueryIterator> GetQueryResult(string query) =>
+            _handler.HandleGetQueryResult(string.Empty, query, ChannelId, TxId);
 
-        // TODO: Correct return value
-        public Task GetHistoryForKey(string key) => _handler.HandleGetHistoryForKey(key, ChannelId, TxId);
+        public Task<HistoryQueryIterator> GetHistoryForKey(string key) => _handler.HandleGetHistoryForKey(key, ChannelId, TxId);
 
-        public Task InvokeChaincode(string chaincodeName, byte[][] args, string channel)
+        public Task InvokeChaincode(string chaincodeName, IEnumerable<ByteString> args, string channel = "")
         {
             if (!string.IsNullOrEmpty(channel))
             {
                 chaincodeName = $"{chaincodeName}/{channel}";
             }
 
-            return _handler.HandleInvokeChaincode(chaincodeName, args, chaincodeName, TxId);
+            return _handler.HandleInvokeChaincode(chaincodeName, args, ChannelId, TxId);
         }
 
         public void SetEvent(string name, ByteString payload)
@@ -325,13 +327,13 @@ namespace Chaincode.NET.Chaincode
 
         public Task<ByteString> GetPrivateData(string collection, string key) =>
             _handler.HandleGetState(collection, key, ChannelId, TxId);
-        
+
         public Task<ByteString> PutPrivateData(string collection, string key, ByteString value) =>
             _handler.HandlePutState(collection, key, value, ChannelId, TxId);
-        
+
         public Task<ByteString> DeletePrivateData(string collection, string key) =>
             _handler.HandleDeleteState(collection, key, ChannelId, TxId);
-        
+
         // TODO: Correct return value
         public Task GetPrivateDataByRange(string collection, string startKey, string endKey)
         {
@@ -339,10 +341,10 @@ namespace Chaincode.NET.Chaincode
             {
                 startKey = EmptyKeySubstitute.ToString();
             }
-            
+
             return _handler.HandleGetStateByRange(collection, startKey, endKey, ChannelId, TxId);
         }
-        
+
         // TODO: Correct return value
         public Task GetPrivateDataByPartialCompositeKey(string collection, string objectType, IList<string> attributes)
         {
@@ -350,7 +352,7 @@ namespace Chaincode.NET.Chaincode
 
             return GetPrivateDataByRange(collection, partialCompositeKey, partialCompositeKey + MaxUnicodeRuneValue);
         }
-        
+
         // TODO: Correct return value
         public Task GetPrivateDataQueryResult(string collection, string query) =>
             _handler.HandleGetQueryResult(collection, query, ChannelId, TxId);
