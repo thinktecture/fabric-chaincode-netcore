@@ -30,11 +30,13 @@ namespace Chaincode.NET.Handler
             ILogger<MessageQueue> messageQueueLogger
         )
         {
-            _chaincode = chaincode;
-            _chaincodeStubFactory = chaincodeStubFactory;
-            _logger = logger;
-            _handlerLogger = handlerLogger;
-            _messageQueueLogger = messageQueueLogger;
+            if (chaincodeSettings == null) throw new ArgumentNullException(nameof(chaincodeSettings));
+            
+            _chaincode = chaincode ?? throw new ArgumentNullException(nameof(chaincode));
+            _chaincodeStubFactory = chaincodeStubFactory ?? throw new ArgumentNullException(nameof(chaincodeSettings));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _handlerLogger = handlerLogger ?? throw new ArgumentNullException(nameof(handlerLogger));
+            _messageQueueLogger = messageQueueLogger ?? throw new ArgumentNullException(nameof(messageQueueLogger));
             _chaincodeSettings = chaincodeSettings.Value;
 
             logger.LogInformation($"Instantiating shim with chaincode of type {chaincode.GetType().Name}");
