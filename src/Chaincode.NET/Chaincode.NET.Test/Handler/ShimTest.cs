@@ -53,15 +53,13 @@ namespace Chaincode.NET.Test.Handler
             {
                 CORE_PEER_ADDRESS = "grpcs://example.test"
             });
-            
-            var shim = new Shim(new Mock<IChaincode>().Object, options, new Mock<IChaincodeStubFactory>().Object,
-                new Mock<ILogger<Shim>>().Object, new Mock<ILogger<NET.Handler.Handler>>().Object,
-                new Mock<ILogger<MessageQueue>>().Object);
+
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
 
             shim.Awaiting(m => m.Start())
                 .Should().Throw<Exception>("Peer Address should not contain any protocol information.");
         }
-        
+
         [Fact]
         public void Start_throws_an_error_when_peer_address_port_is_missing()
         {
@@ -69,10 +67,8 @@ namespace Chaincode.NET.Test.Handler
             {
                 CORE_PEER_ADDRESS = "example.test"
             });
-            
-            var shim = new Shim(new Mock<IChaincode>().Object, options, new Mock<IChaincodeStubFactory>().Object,
-                new Mock<ILogger<Shim>>().Object, new Mock<ILogger<NET.Handler.Handler>>().Object,
-                new Mock<ILogger<MessageQueue>>().Object);
+
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
 
             shim.Awaiting(m => m.Start())
                 .Should().Throw<Exception>("Please provide peer address in the format of host:port");

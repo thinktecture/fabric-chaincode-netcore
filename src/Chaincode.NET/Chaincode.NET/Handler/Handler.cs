@@ -40,7 +40,7 @@ namespace Chaincode.NET.Handler
             int port,
             IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Handler> logger,
-            ILogger<MessageQueue> messageQueueLogger
+            IMessageQueueFactory messageQueueFactory
         )
         {
             _chaincode = chaincode;
@@ -53,7 +53,7 @@ namespace Chaincode.NET.Handler
                 {
                     new ChannelOption("request-timeout", 3000000)
                 }));
-            _messageQueue = new MessageQueue(this, messageQueueLogger);
+            _messageQueue = messageQueueFactory.Create(this);
         }
 
         public void Close()
@@ -196,7 +196,7 @@ namespace Chaincode.NET.Handler
             ChaincodeStub stub = null;
             try
             {
-                stub = _chaincodeStubFactory.CreateChaincodeStub(this, message.ChannelId, message.Txid, input,
+                stub = _chaincodeStubFactory.Create(this, message.ChannelId, message.Txid, input,
                     message.Proposal);
             }
             catch (Exception ex)

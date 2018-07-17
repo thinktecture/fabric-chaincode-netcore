@@ -14,44 +14,35 @@ namespace Chaincode.NET.Handler
 {
     public class Shim
     {
-        private readonly IChaincode _chaincode;
-        private readonly IChaincodeStubFactory _chaincodeStubFactory;
         private readonly ILogger<Shim> _logger;
-        private readonly ILogger<Handler> _handlerLogger;
-        private readonly ILogger<MessageQueue> _messageQueueLogger;
+        private readonly IHandlerFactory _handlerFactory;
         private readonly ChaincodeSettings _chaincodeSettings;
 
         public Shim(
-            IChaincode chaincode,
             IOptions<ChaincodeSettings> chaincodeSettings,
-            IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Shim> logger,
-            ILogger<Handler> handlerLogger,
-            ILogger<MessageQueue> messageQueueLogger
+            IHandlerFactory handlerFactory
         )
         {
             if (chaincodeSettings == null) throw new ArgumentNullException(nameof(chaincodeSettings));
-            
-            _chaincode = chaincode ?? throw new ArgumentNullException(nameof(chaincode));
-            _chaincodeStubFactory = chaincodeStubFactory ?? throw new ArgumentNullException(nameof(chaincodeSettings));
+
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _handlerLogger = handlerLogger ?? throw new ArgumentNullException(nameof(handlerLogger));
-            _messageQueueLogger = messageQueueLogger ?? throw new ArgumentNullException(nameof(messageQueueLogger));
+            _handlerFactory = handlerFactory ?? throw new ArgumentNullException(nameof(handlerFactory));
             _chaincodeSettings = chaincodeSettings.Value;
 
-            logger.LogInformation($"Instantiating shim with chaincode of type {chaincode.GetType().Name}");
-            GrpcEnvironment.SetLogger(new ConsoleLogger());
+            if (_chaincodeSettings.LogGrpc)
+            {
+                GrpcEnvironment.SetLogger(new ConsoleLogger());
+            }
         }
 
-        public async Task<Handler> Start()
+        public async Task<IHandler> Start()
         {
             var url = ParseUrl(_chaincodeSettings.PeerAddress);
 
             // TODO: TLS Stuff?
-            // TODO: Handler factory?
-            // TODO: MessageQueue factory?
 
-            var handler = new Handler(_chaincode, url.Host, url.Port, _chaincodeStubFactory, _handlerLogger, _messageQueueLogger);
+            var handler = _handlerFactory.Create(url.Host, url.Port);
 
             var chaincodeId = new ChaincodeID {Name = _chaincodeSettings.ChaincodeIdName};
 
@@ -86,6 +77,7 @@ namespace Chaincode.NET.Handler
         }
 
         public static Response Success() => Success(ByteString.Empty);
+
         public static Response Success(ByteString payload) => new Response()
         {
             Status = (int) ResponseCodes.Ok,

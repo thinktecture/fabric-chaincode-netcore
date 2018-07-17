@@ -26,7 +26,7 @@ namespace Chaincode.NET.Chaincode
             _serviceProvider = serviceProvider;
         }
 
-        public ChaincodeStub CreateChaincodeStub(
+        public ChaincodeStub Create(
             IHandler handler,
             string channelId,
             string txId,
