@@ -25,7 +25,8 @@ namespace Chaincode.NET.Handler
                     port,
                     scope.ServiceProvider.GetRequiredService<IChaincodeStubFactory>(),
                     scope.ServiceProvider.GetRequiredService<ILogger<Handler>>(),
-                    scope.ServiceProvider.GetRequiredService<IMessageQueueFactory>()
+                    scope.ServiceProvider.GetRequiredService<IMessageQueueFactory>(),
+                    scope.ServiceProvider.GetRequiredService<IChaincodeSupportClientFactory>()
                 );
             }
         }

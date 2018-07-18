@@ -40,7 +40,8 @@ namespace Chaincode.NET.Handler
             int port,
             IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Handler> logger,
-            IMessageQueueFactory messageQueueFactory
+            IMessageQueueFactory messageQueueFactory,
+            IChaincodeSupportClientFactory chaincodeSupportClientFactory
         )
         {
             _chaincode = chaincode;
@@ -48,10 +49,10 @@ namespace Chaincode.NET.Handler
             _logger = logger;
 
             // TODO: Secure channel?
-            _client = new ChaincodeSupport.ChaincodeSupportClient(new Channel(host, port, ChannelCredentials.Insecure,
+            _client = chaincodeSupportClientFactory.Create(new Channel(host, port, ChannelCredentials.Insecure,
                 new List<ChannelOption>()
                 {
-                    new ChannelOption("request-timeout", 3000000)
+                    new ChannelOption("request-timeout", 30000)
                 }));
             _messageQueue = messageQueueFactory.Create(this);
         }
@@ -128,8 +129,10 @@ namespace Chaincode.NET.Handler
                         {
                             _logger.LogError("Chaincode is in ready, can only process messages of type " +
                                              $"'established', but received {message.Type}");
-                            await _stream.RequestStream.WriteAsync(NewErrorMessage(message,
-                                state)); // TODO: Maybe don't await?
+#pragma warning disable 4014
+                            _stream.RequestStream.WriteAsync(NewErrorMessage(message,
+#pragma warning restore 4014
+                                state));
                         }
                     }
 
@@ -145,8 +148,10 @@ namespace Chaincode.NET.Handler
                         {
                             _logger.LogError("Chaincode is in \"created\" state, can only process message of type " +
                                              $"\"registered\", but received {message.Type}");
-                            await _stream.RequestStream.WriteAsync(NewErrorMessage(message,
-                                state)); // TODO: Maybe don't await?
+#pragma warning disable 4014
+                            _stream.RequestStream.WriteAsync(NewErrorMessage(message,
+#pragma warning restore 4014
+                                state));
                         }
                     }
                 }
@@ -284,7 +289,6 @@ namespace Chaincode.NET.Handler
             };
         }
 
-        // TODO: Correct result type
         public object ParseResponse(ChaincodeMessage response, MessageMethod messageMethod)
         {
             if (response.Type == ChaincodeMessage.Types.Type.Response)

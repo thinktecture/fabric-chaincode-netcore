@@ -31,6 +31,7 @@ namespace Chaincode.NET
             serviceCollection.AddSingleton<IChaincodeStubFactory, ChaincodeStubFactory>();
             serviceCollection.AddSingleton<IHandlerFactory, HandlerFactory>();
             serviceCollection.AddSingleton<IMessageQueueFactory, MessageQueueFactory>();
+            serviceCollection.AddSingleton<IChaincodeSupportClientFactory, ChaincodeSupportClientFactory>();
         }
 
         private static void ConfigureSettings(ServiceCollection serviceCollection, string[] args)
