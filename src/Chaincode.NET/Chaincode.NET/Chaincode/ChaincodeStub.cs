@@ -26,7 +26,7 @@ namespace Chaincode.NET.Chaincode
             _serviceProvider = serviceProvider;
         }
 
-        public ChaincodeStub Create(
+        public IChaincodeStub Create(
             IHandler handler,
             string channelId,
             string txId,
@@ -42,7 +42,7 @@ namespace Chaincode.NET.Chaincode
         }
     }
 
-    public class ChaincodeStub
+    public class ChaincodeStub : IChaincodeStub
     {
         private const char EmptyKeySubstitute = '\x01';
         private const char MinUnicodeRuneValue = '\u0000';

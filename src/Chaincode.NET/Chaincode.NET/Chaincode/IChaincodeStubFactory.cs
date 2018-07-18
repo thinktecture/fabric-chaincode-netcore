@@ -5,7 +5,7 @@ namespace Chaincode.NET.Chaincode
 {
     public interface IChaincodeStubFactory
     {
-        ChaincodeStub Create(
+        IChaincodeStub Create(
             IHandler handler,
             string channelId,
             string txId,

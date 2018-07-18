@@ -19,7 +19,7 @@ namespace Chaincode.NET.Sample
             _logger = logger;
         }
         
-        public async Task<Response> Init(ChaincodeStub stub)
+        public async Task<Response> Init(IChaincodeStub stub)
         {
             _logger.LogInformation("=================== Example Init ===================");
 
@@ -50,7 +50,7 @@ namespace Chaincode.NET.Sample
             }
         }
 
-        public async Task<Response> Invoke(ChaincodeStub stub)
+        public async Task<Response> Invoke(IChaincodeStub stub)
         {
             _logger.LogInformation("=================== Example Invoke ===================");
 
@@ -84,7 +84,7 @@ namespace Chaincode.NET.Sample
             }
         }
 
-        private async Task<ByteString> InternalQuery(ChaincodeStub stub, IList<string> args)
+        private async Task<ByteString> InternalQuery(IChaincodeStub stub, IList<string> args)
         {
             if (args.Count != 1)
             {
@@ -104,7 +104,7 @@ namespace Chaincode.NET.Sample
             return aValueBytes;
         }
 
-        private async Task<ByteString> InternalInvoke(ChaincodeStub stub, IList<string> args) 
+        private async Task<ByteString> InternalInvoke(IChaincodeStub stub, IList<string> args) 
         {
             if (args.Count != 3)
             {

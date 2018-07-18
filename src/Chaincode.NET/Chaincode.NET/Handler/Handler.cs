@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
@@ -13,17 +14,11 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Protos;
 
+[assembly:InternalsVisibleTo("Chaincode.NET.Test")]
 namespace Chaincode.NET.Handler
 {
     public class Handler : IHandler
     {
-        private enum States
-        {
-            Created,
-            Established,
-            Ready
-        }
-
         private readonly IChaincode _chaincode;
         private readonly IChaincodeStubFactory _chaincodeStubFactory;
         private readonly IMessageQueue _messageQueue;
@@ -31,6 +26,9 @@ namespace Chaincode.NET.Handler
         private readonly ChaincodeSupport.ChaincodeSupportClient _client;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private AsyncDuplexStreamingCall<ChaincodeMessage, ChaincodeMessage> _stream;
+
+        // For testing only, will be removed with the impl. of a message handler
+        public States State { get; set; } = States.Created;
 
         public IClientStreamWriter<ChaincodeMessage> WriteStream => _stream.RequestStream;
 
@@ -68,8 +66,6 @@ namespace Chaincode.NET.Handler
 
             // TODO: Write a message handler
 
-            var state = States.Created;
-
             await _stream.RequestStream.WriteAsync(conversationStarterMessage);
 
             await Task.Run(async () =>
@@ -78,9 +74,9 @@ namespace Chaincode.NET.Handler
                 {
                     var message = _stream.ResponseStream.Current;
 
-                    _logger.LogDebug($"Received chat message from peer: {message} {state}");
+                    _logger.LogDebug($"Received chat message from peer: {message} {State}");
 
-                    if (state == States.Ready)
+                    if (State == States.Ready)
                     {
                         var type = message.Type;
 
@@ -104,7 +100,7 @@ namespace Chaincode.NET.Handler
                             else if (type == ChaincodeMessage.Types.Type.Transaction)
                             {
                                 _logger.LogDebug($"[{message.ChannelId}-{message.Txid}], Received {message.Type}, " +
-                                                 $"invoking transaction on chaincode (state: {state})");
+                                                 $"invoking transaction on chaincode (state: {State})");
 #pragma warning disable 4014
                                 HandleTransaction(message);
 #pragma warning restore 4014
@@ -117,13 +113,13 @@ namespace Chaincode.NET.Handler
                         }
                     }
 
-                    if (state == States.Established)
+                    if (State == States.Established)
                     {
                         if (message.Type == ChaincodeMessage.Types.Type.Ready)
                         {
                             _logger.LogInformation(
                                 "Successfully established communication with peer node. State transferred to \"ready\"");
-                            state = States.Ready;
+                            State = States.Ready;
                         }
                         else
                         {
@@ -132,17 +128,17 @@ namespace Chaincode.NET.Handler
 #pragma warning disable 4014
                             _stream.RequestStream.WriteAsync(NewErrorMessage(message,
 #pragma warning restore 4014
-                                state));
+                                State));
                         }
                     }
 
-                    if (state == States.Created)
+                    if (State == States.Created)
                     {
                         if (message.Type == ChaincodeMessage.Types.Type.Registered)
                         {
                             _logger.LogInformation(
                                 "Successfully registered with peer node. State transferred to \"established\"");
-                            state = States.Established;
+                            State = States.Established;
                         }
                         else
                         {
@@ -151,7 +147,7 @@ namespace Chaincode.NET.Handler
 #pragma warning disable 4014
                             _stream.RequestStream.WriteAsync(NewErrorMessage(message,
 #pragma warning restore 4014
-                                state));
+                                State));
                         }
                     }
                 }
@@ -198,7 +194,7 @@ namespace Chaincode.NET.Handler
                 return;
             }
 
-            ChaincodeStub stub = null;
+            IChaincodeStub stub = null;
             try
             {
                 stub = _chaincodeStubFactory.Create(this, message.ChannelId, message.Txid, input,

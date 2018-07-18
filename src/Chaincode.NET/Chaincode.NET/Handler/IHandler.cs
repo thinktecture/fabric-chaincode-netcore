@@ -37,5 +37,7 @@ namespace Chaincode.NET.Handler
             string channelId,
             string txId
         );
+        
+        States State { get; set; } // For testing only, will be removed with the impl. of a message handler
     }
 }
