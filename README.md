@@ -4,6 +4,9 @@ With this package you are able to build chaincode (aka "Smart Contracts") for [H
 
 ## TODO
 
+- TLS Support
+- Message Handler
+- See TODO in code
 - Unit Tests
 	- Handler
 	- Iterators
