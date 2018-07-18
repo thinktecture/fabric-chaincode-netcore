@@ -39,7 +39,7 @@ namespace Chaincode.NET.Test.Handler
         {
             var sut = Shim.Error("foobar");
 
-            sut.Payload.ToStringUtf8().Should().Be("foobar");
+            sut.Message.Should().Be("foobar");
             sut.Status.Should().Be((int) ResponseCodes.Error);
         }
 
