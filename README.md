@@ -12,8 +12,8 @@ List of non-prioritized todo items:
 - See TODO in code
 - Combine MessageMethod & ChaincodeMessage.Types.Type.GetState
 - Unit Tests
-	- Handler
 	- Iterators
+- Integration Test
 - NuGet Package
 - Docs
 - Samples
