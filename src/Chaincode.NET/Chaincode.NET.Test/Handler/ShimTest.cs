@@ -1,18 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
 using Chaincode.NET.Handler;
-using Chaincode.NET.Messaging;
 using Chaincode.NET.Protos.Extensions;
 using Chaincode.NET.Settings;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Win32.SafeHandles;
 using Moq;
-using Protos;
 using Xunit;
 
 namespace Chaincode.NET.Test.Handler

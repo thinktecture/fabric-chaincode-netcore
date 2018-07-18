@@ -14,13 +14,13 @@ namespace Chaincode.NET.Test.Messaging
     public class MessageQueueTest
     {
         [Fact]
-        public  async void Directly_sends_a_single_message()
+        public async void Directly_sends_a_single_message()
         {
             var handlerMock = new Mock<IHandler>();
             var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>();
 
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
-            
+
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);
 
             var chaincodeMessage = new ChaincodeMessage()
@@ -28,9 +28,9 @@ namespace Chaincode.NET.Test.Messaging
                 Txid = "bar",
                 ChannelId = "foo"
             };
-            
+
             await sut.QueueMessage(new QueueMessage(chaincodeMessage, 0));
-            
+
             streamMock.Verify(m => m.WriteAsync(chaincodeMessage), Times.Once);
         }
 
@@ -41,7 +41,7 @@ namespace Chaincode.NET.Test.Messaging
             var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>();
 
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
-            
+
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);
 
             var chaincodeMessage = new ChaincodeMessage()
@@ -49,10 +49,10 @@ namespace Chaincode.NET.Test.Messaging
                 Txid = "bar",
                 ChannelId = "foo"
             };
-            
+
             await sut.QueueMessage(new QueueMessage(chaincodeMessage, 0));
             await sut.QueueMessage(new QueueMessage(new ChaincodeMessage(), 0));
-            
+
             streamMock.Verify(m => m.WriteAsync(chaincodeMessage), Times.Once);
         }
 
@@ -61,10 +61,10 @@ namespace Chaincode.NET.Test.Messaging
         {
             var sut = new MessageQueue(new Mock<IHandler>().Object, new Mock<ILogger<MessageQueue>>().Object);
             sut.Invoking(s => s.HandleMessageResponse(new ChaincodeMessage()
-            {
-                ChannelId = "foo",
-                Txid = "bar"
-            }))
+                {
+                    ChannelId = "foo",
+                    Txid = "bar"
+                }))
                 .Should().Throw<Exception>();
         }
 
@@ -72,13 +72,13 @@ namespace Chaincode.NET.Test.Messaging
         public async Task Correctly_handles_a_response_message()
         {
             var handlerMock = new Mock<IHandler>();
-            var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>(); 
-            
+            var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>();
+
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
-            
+
             handlerMock.Setup(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
                 .Returns("foobar");
-            
+
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);
 
             var taskCompletionSource = new TaskCompletionSource<string>();
@@ -87,9 +87,9 @@ namespace Chaincode.NET.Test.Messaging
                 ChannelId = "chaincode",
                 Txid = "message"
             }, 0, taskCompletionSource);
-            
+
             await sut.QueueMessage(queueMessage);
-            
+
             sut.HandleMessageResponse(new ChaincodeMessage()
             {
                 ChannelId = "chaincode",
@@ -100,18 +100,18 @@ namespace Chaincode.NET.Test.Messaging
 
             result.Should().Be("foobar");
         }
-        
+
         [Fact]
         public async Task Throws_an_exception_when_message_could_not_be_parsed()
         {
             var handlerMock = new Mock<IHandler>();
-            var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>(); 
-            
+            var streamMock = new Mock<IClientStreamWriter<ChaincodeMessage>>();
+
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
 
             handlerMock.Setup(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
                 .Throws<Exception>();
-            
+
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);
 
             var taskCompletionSource = new TaskCompletionSource<string>();
@@ -120,9 +120,9 @@ namespace Chaincode.NET.Test.Messaging
                 ChannelId = "chaincode",
                 Txid = "message"
             }, 0, taskCompletionSource);
-            
+
             await sut.QueueMessage(queueMessage);
-            
+
             sut.HandleMessageResponse(new ChaincodeMessage()
             {
                 ChannelId = "chaincode",

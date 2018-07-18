@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
 using Chaincode.NET.Handler;
@@ -14,7 +13,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Msp;
 using Protos;
-using Queryresult;
 using Xunit;
 
 namespace Chaincode.NET.Test.Chaincode
@@ -850,7 +848,7 @@ namespace Chaincode.NET.Test.Chaincode
                 .Should().Throw<Exception>()
                 .WithMessage("collection must be a valid string");
         }
-        
+
         [Fact]
         public async void GetPrivateDataByPartialCompositeKey_returns_expected_result()
         {
@@ -868,7 +866,7 @@ namespace Chaincode.NET.Test.Chaincode
                 m => m.HandleGetStateByRange("collection", expectedKey, expectedKey + _maxUnicodeRuneValue, "ChannelId",
                     "TxId"), Times.Once);
         }
-        
+
         [Fact]
         public void GetPrivateDataQueryResult_throws_an_exception_when_collection_is_not_set()
         {
