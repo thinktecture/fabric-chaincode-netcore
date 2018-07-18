@@ -6,6 +6,8 @@ using Chaincode.NET.Protos.Extensions;
 using Chaincode.NET.Settings;
 using FluentAssertions;
 using Google.Protobuf;
+using Grpc.Core;
+using Grpc.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -100,6 +102,21 @@ namespace Chaincode.NET.Test.Handler
             
             handlerFactoryMock.VerifyAll();
             handlerMock.VerifyAll();
+        }
+
+        [Fact]
+        public void GrpcEnvironment_sets_logger_to_console_if_option_is_set()
+        {
+            var options = Options.Create(new ChaincodeSettings()
+            {
+                CORE_PEER_ADDRESS = "example.test:9999",
+                CORE_CHAINCODE_ID_NAME = "unittest",
+                CORE_LOG_GRPC = true
+            });
+            
+            var _ = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
+
+            GrpcEnvironment.Logger.Should().BeOfType<ConsoleLogger>();
         }
     }
 }
