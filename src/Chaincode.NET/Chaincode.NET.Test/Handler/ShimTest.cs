@@ -1,12 +1,15 @@
 using System;
+using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
 using Chaincode.NET.Handler;
 using Chaincode.NET.Protos.Extensions;
 using Chaincode.NET.Settings;
 using FluentAssertions;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using Protos;
 using Xunit;
 
 namespace Chaincode.NET.Test.Handler
@@ -66,6 +69,37 @@ namespace Chaincode.NET.Test.Handler
 
             shim.Awaiting(m => m.Start())
                 .Should().Throw<Exception>("Please provide peer address in the format of host:port");
+        }
+
+        [Fact]
+        public async void Start_calls_the_handlers_chat_method()
+        {
+            var options = Options.Create(new ChaincodeSettings()
+            {
+                CORE_PEER_ADDRESS = "example.test:9999",
+                CORE_CHAINCODE_ID_NAME = "unittest"
+            });
+
+            var message = new ChaincodeMessage()
+            {
+                Type = ChaincodeMessage.Types.Type.Register,
+                Payload = new ChaincodeID() {Name = "unittest"}.ToByteString()
+            };
+            
+            var handlerMock = new Mock<IHandler>();
+            handlerMock.Setup(m => m.Chat(message)).Returns(Task.CompletedTask);
+
+            var handlerFactoryMock = new Mock<IHandlerFactory>();
+            handlerFactoryMock.Setup(m => m.Create("example.test", 9999))
+                .Returns(handlerMock.Object);
+
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, handlerFactoryMock.Object);
+            var result = await shim.Start();
+
+            result.Should().BeSameAs(handlerMock.Object);
+            
+            handlerFactoryMock.VerifyAll();
+            handlerMock.VerifyAll();
         }
     }
 }
