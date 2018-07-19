@@ -1,11 +1,9 @@
 using System;
-using System.Threading.Tasks;
 using Chaincode.NET.Handler;
 using Chaincode.NET.Handler.Iterators;
 using Chaincode.NET.Protos.Extensions;
 using FluentAssertions;
 using Google.Protobuf;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
 using Protos;
 using Queryresult;
@@ -171,6 +169,61 @@ namespace Chaincode.NET.Test.Handler
 
             exception.Should().NotBeNull();
             exception.Message.Should().Be("unittest");
+        }
+        
+        [Fact]
+        public async void HistoryQueryIterator_next_emits_OnData_when_data_is_available()
+        {
+            var response = new QueryResponse() {HasMore = true};
+            response.Results.AddRange(new[]
+            {
+                new QueryResultBytes()
+                {
+                    ResultBytes = new KeyModification()
+                        {
+                            TxId = "txid1",
+                            IsDelete = false,
+                            Value = "foo".ToByteString()
+                        }
+                        .ToByteString()
+                },
+                new QueryResultBytes()
+                {
+                    ResultBytes = new KeyModification()
+                        {
+                            TxId = "txid2",
+                            IsDelete = true,
+                            Value = "foo".ToByteString()
+                        }
+                        .ToByteString()
+                }
+            });
+
+            QueryResult<KeyModification> queryResult = null;
+
+            var iterator = new HistoryQueryIterator(null, null, null, response);
+
+            iterator.Data += result => queryResult = result;
+
+            var iteratorResult = await iterator.Next();
+
+            iteratorResult.Should().NotBeNull();
+            queryResult.Should().NotBeNull();
+            iteratorResult.Should().BeSameAs(queryResult);
+
+            queryResult.Value.IsDelete.Should().BeFalse();
+            queryResult.Value.TxId.Should().Be("txid1");
+            queryResult.Value.Value.ToStringUtf8().Should().Be("foo");
+
+            iteratorResult = await iterator.Next();
+
+            iteratorResult.Should().NotBeNull();
+            queryResult.Should().NotBeNull();
+            iteratorResult.Should().BeSameAs(queryResult);
+
+            queryResult.Value.IsDelete.Should().BeTrue();
+            queryResult.Value.TxId.Should().Be("txid2");
+            queryResult.Value.Value.ToStringUtf8().Should().Be("foo");
         }
     }
 }
