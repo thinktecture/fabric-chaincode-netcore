@@ -13,9 +13,16 @@ namespace Chaincode.NET.Sample
     {
         private readonly ILogger<AssetHolding> _logger;
 
+        private readonly ChaincodeInvocationMap _invocationMap;
+
         public AssetHolding(ILogger<AssetHolding> logger)
         {
             _logger = logger;
+            _invocationMap = new ChaincodeInvocationMap()
+            {
+                {"invoke", InternalInvoke},
+                {"query", InternalQuery}
+            };
         }
 
         public async Task<Response> Init(IChaincodeStub stub)
@@ -45,38 +52,10 @@ namespace Chaincode.NET.Sample
             return Shim.Error("Error during Chaincode init!");
         }
 
-        public async Task<Response> Invoke(IChaincodeStub stub)
+        public Task<Response> Invoke(IChaincodeStub stub)
         {
             _logger.LogInformation("=================== Example Invoke ===================");
-
-            var functionAndParameters = stub.GetFunctionAndParameters();
-
-            try
-            {
-                ByteString payload = null;
-
-                if (functionAndParameters.Function == "invoke")
-                {
-                    payload = await InternalInvoke(stub, functionAndParameters.Parameters);
-                }
-
-                if (functionAndParameters.Function == "query")
-                {
-                    payload = await InternalQuery(stub, functionAndParameters.Parameters);
-                }
-
-                if (payload == null)
-                {
-                    return Shim.Error($"Chaincode invoked with unknown method name: {functionAndParameters.Function}");
-                }
-
-                return Shim.Success(payload);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error during Chaincode invocation");
-                return Shim.Error(ex);
-            }
+            return _invocationMap.Invoke(stub);
         }
 
         private async Task<ByteString> InternalQuery(IChaincodeStub stub, Parameters args)
