@@ -33,16 +33,15 @@ namespace Chaincode.NET.Sample
 
             var args = functionAndParameters.Parameters;
 
-            if (args.Count != 4)
-            {
-                return Shim.Error("Incorrect number of arguments, expecting 4");
-            }
+            args.AssertCount(4);
 
             if (!args.TryGet<int>(1, out var aValue) || 
                 !args.TryGet<int>(3, out var bValue))
             {
                 return Shim.Error("Expecting integer value for asset holding");
             }
+
+          
 
             if (await stub.PutState("a", aValue) && await stub.PutState("b", bValue))
             {
@@ -60,10 +59,7 @@ namespace Chaincode.NET.Sample
 
         private async Task<ByteString> InternalQuery(IChaincodeStub stub, Parameters args)
         {
-            if (args.Count != 1)
-            {
-                throw new Exception("Incorrect number of arguments. Expecting 1");
-            }
+            args.AssertCount(1);
 
             var a = args[0];
 
@@ -80,26 +76,21 @@ namespace Chaincode.NET.Sample
 
         private async Task<ByteString> InternalInvoke(IChaincodeStub stub, Parameters args)
         {
-            if (args.Count != 3)
-            {
-                throw new Exception("Incorrect number of arguments. Expecting 3");
-            }
+            args.AssertCount(3);
 
             var a = args.Get<string>(0);
-            var b = args.Get<string>(0);
+            var b = args.Get<string>(1);
 
             if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
             {
                 throw new Exception("Asset holding must not be empty");
             }
 
-            var aValueBytes = await stub.GetState(a);
-            if (aValueBytes == null)
+            var aValue = await stub.TryGetState<int>(a);
+            if (!aValue.HasValue)
             {
                 throw new Exception("Failed to get state of asset holder A");
             }
-
-            var aValue = int.Parse(aValueBytes.ToStringUtf8());
 
             var bValue = await stub.TryGetState<int>(b);
             if (!bValue.HasValue)
