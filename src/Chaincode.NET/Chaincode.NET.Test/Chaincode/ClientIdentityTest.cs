@@ -114,7 +114,7 @@ namespace Chaincode.NET.Test.Chaincode
                 .Be(
                     "x509::/CN=User1@org2.example.com, L=San Francisco, S=California, C=US::/CN=ca.org2.example.com, O=org2.example.com, L=San Francisco, S=California, C=US");
         }
-        
+
         [Fact]
         public void ClientIdentity_throws_an_error_when_certificate_is_empty()
         {
@@ -125,7 +125,7 @@ namespace Chaincode.NET.Test.Chaincode
             action.Should().Throw<Exception>()
                 .WithMessage("Failed to find start line or end line of the certificate.");
         }
-        
+
         [Fact]
         public void ClientIdentity_throws_an_error_when_certificate_begin_line_is_missing()
         {
@@ -138,7 +138,7 @@ namespace Chaincode.NET.Test.Chaincode
             action.Should().Throw<Exception>()
                 .WithMessage("Failed to find start line or end line of the certificate.");
         }
-        
+
         [Fact]
         public void ClientIdentity_throws_an_error_when_certificate_end_line_is_missing()
         {

@@ -87,7 +87,7 @@ namespace Chaincode.NET.Test.Handler
                 Type = ChaincodeMessage.Types.Type.Register,
                 Payload = new ChaincodeID() {Name = "unittest"}.ToByteString()
             };
-            
+
             var handlerMock = new Mock<IHandler>();
             handlerMock.Setup(m => m.Chat(message)).Returns(Task.CompletedTask);
 
@@ -99,7 +99,7 @@ namespace Chaincode.NET.Test.Handler
             var result = await shim.Start();
 
             result.Should().BeSameAs(handlerMock.Object);
-            
+
             handlerFactoryMock.VerifyAll();
             handlerMock.VerifyAll();
         }
@@ -113,7 +113,7 @@ namespace Chaincode.NET.Test.Handler
                 CORE_CHAINCODE_ID_NAME = "unittest",
                 CORE_LOG_GRPC = true
             });
-            
+
             var _ = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
 
             GrpcEnvironment.Logger.Should().BeOfType<ConsoleLogger>();

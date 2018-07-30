@@ -7,7 +7,6 @@ using Chaincode.NET.Handler;
 using Chaincode.NET.Handler.Iterators;
 using Chaincode.NET.Messaging;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;

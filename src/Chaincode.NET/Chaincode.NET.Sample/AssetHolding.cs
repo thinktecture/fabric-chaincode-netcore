@@ -18,7 +18,7 @@ namespace Chaincode.NET.Sample
         {
             _logger = logger;
         }
-        
+
         public async Task<Response> Init(IChaincodeStub stub)
         {
             _logger.LogInformation("=================== Example Init ===================");
@@ -59,10 +59,10 @@ namespace Chaincode.NET.Sample
             try
             {
                 ByteString payload = null;
-                
+
                 if (functionAndParameters.Function == "invoke")
                 {
-                    payload = await InternalInvoke(stub, functionAndParameters.Parameters);                   
+                    payload = await InternalInvoke(stub, functionAndParameters.Parameters);
                 }
 
                 if (functionAndParameters.Function == "query")
@@ -74,7 +74,7 @@ namespace Chaincode.NET.Sample
                 {
                     return Shim.Error($"Chaincode invoked with unknown method name: {functionAndParameters.Function}");
                 }
-                
+
                 return Shim.Success(payload);
             }
             catch (Exception ex)
@@ -94,17 +94,17 @@ namespace Chaincode.NET.Sample
             var a = args[0];
 
             var aValueBytes = await stub.GetState(a);
-            
+
             if (aValueBytes == null)
             {
                 throw new Exception("Failed to get state of asset holder A");
             }
-            
+
             _logger.LogInformation($"Query Response: name={a}, value={aValueBytes.ToStringUtf8()}");
             return aValueBytes;
         }
 
-        private async Task<ByteString> InternalInvoke(IChaincodeStub stub, IList<string> args) 
+        private async Task<ByteString> InternalInvoke(IChaincodeStub stub, IList<string> args)
         {
             if (args.Count != 3)
             {
@@ -118,7 +118,7 @@ namespace Chaincode.NET.Sample
             {
                 throw new Exception("Asset holding must not be empty");
             }
-            
+
             var aValueBytes = await stub.GetState(a);
             if (aValueBytes == null)
             {
@@ -127,7 +127,7 @@ namespace Chaincode.NET.Sample
 
             var aValue = int.Parse(aValueBytes.ToStringUtf8());
 
-            
+
             var bValueBytes = await stub.GetState(b);
             if (bValueBytes == null)
             {
@@ -143,7 +143,7 @@ namespace Chaincode.NET.Sample
 
             aValue -= amount;
             bValue += amount;
-            
+
             _logger.LogInformation($"aValue = {aValue}, bValue = {bValue}");
 
             await stub.PutState(a, aValue.ToString().ToByteString());

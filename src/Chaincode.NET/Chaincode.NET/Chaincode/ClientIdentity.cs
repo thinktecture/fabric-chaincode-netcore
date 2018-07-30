@@ -18,7 +18,9 @@ namespace Chaincode.NET.Chaincode
         public string Id { get; private set; }
         public string Mspid { get; private set; }
         public X509Certificate2 X509Certificate { get; private set; }
-        public IDictionary<string, string> Attributes { get; private set; } = new ConcurrentDictionary<string, string>();
+
+        public IDictionary<string, string> Attributes { get; private set; } =
+            new ConcurrentDictionary<string, string>();
 
         public ClientIdentity(IChaincodeStub chaincodeStub)
         {

@@ -142,14 +142,14 @@ namespace Chaincode.NET.Test.Handler
             var handlerMock = new Mock<IHandler>();
             handlerMock.Setup(m => m.HandleQueryStateNext(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new Exception("unittest"));
-            
+
             var iterator = new StateQueryIterator(handlerMock.Object, null, null, new QueryResponse() {HasMore = true});
 
             iterator.Awaiting(i => i.Next())
                 .Should().Throw<Exception>()
                 .WithMessage("unittest");
         }
-        
+
         [Fact]
         public void
             Next_emits_error_on_next_if_getting_the_next_query_state_throws_and_an_error_handler_is_assigned()
@@ -157,20 +157,20 @@ namespace Chaincode.NET.Test.Handler
             var handlerMock = new Mock<IHandler>();
             handlerMock.Setup(m => m.HandleQueryStateNext(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new Exception("unittest"));
-            
+
             var iterator = new StateQueryIterator(handlerMock.Object, null, null, new QueryResponse() {HasMore = true});
 
             Exception exception = null;
-            
+
             iterator.Error += ex => exception = ex;
-            
+
             iterator.Awaiting(i => i.Next())
                 .Should().NotThrow();
 
             exception.Should().NotBeNull();
             exception.Message.Should().Be("unittest");
         }
-        
+
         [Fact]
         public async void HistoryQueryIterator_next_emits_OnData_when_data_is_available()
         {

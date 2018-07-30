@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
@@ -14,7 +13,6 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Protos;
 
-[assembly:InternalsVisibleTo("Chaincode.NET.Test")]
 namespace Chaincode.NET.Handler
 {
     public class Handler : IHandler
