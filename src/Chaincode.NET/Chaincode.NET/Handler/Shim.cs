@@ -88,5 +88,7 @@ namespace Chaincode.NET.Handler
             Status = (int) ResponseCodes.Error,
             Message = message
         };
+
+        public static Response Error(Exception exception) => Error(exception.ToString());
     }
 }

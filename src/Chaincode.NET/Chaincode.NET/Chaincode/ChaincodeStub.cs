@@ -50,7 +50,6 @@ namespace Chaincode.NET.Chaincode
         private readonly string MaxUnicodeRuneValue = char.ConvertFromUtf32(0x10ffff);
 
         private readonly IHandler _handler;
-        private readonly ChaincodeInput _chaincodeInput;
         private readonly ILogger<ChaincodeStub> _logger;
         private Proposal _proposal;
 
@@ -79,7 +78,6 @@ namespace Chaincode.NET.Chaincode
             _handler = handler;
             ChannelId = channelId;
             TxId = txId;
-            _chaincodeInput = chaincodeInput;
             _logger = logger;
 
             Args = chaincodeInput.Args.Select(entry => entry.ToStringUtf8()).ToList();
@@ -97,10 +95,10 @@ namespace Chaincode.NET.Chaincode
             var result = new ChaincodeFunctionParameterInformation
             {
                 Function = Args.First().ToLower(),
-                Parameters =
-                    Args.Skip(1)
-                        .ToList() // TODO: For usage later wrap this into a class and provide nice methods for access
+                // TODO: For usage later wrap this into a class and provide nice methods for access
             };
+            
+            result.Parameters.AddRange(Args.Skip(1));
 
             return result;
         }

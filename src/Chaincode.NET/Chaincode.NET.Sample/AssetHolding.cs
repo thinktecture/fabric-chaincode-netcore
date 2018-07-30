@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
 using Chaincode.NET.Extensions;
@@ -32,22 +31,18 @@ namespace Chaincode.NET.Sample
                 return Shim.Error("Incorrect number of arguments, expecting 4");
             }
 
-            if (!int.TryParse(args[1], out var aValue) || !int.TryParse(args[3], out var bValue))
+            if (!args.TryGet<int>(1, out var aValue) || 
+                !args.TryGet<int>(3, out var bValue))
             {
                 return Shim.Error("Expecting integer value for asset holding");
             }
 
-            try
+            if (await stub.PutState("a", aValue) && await stub.PutState("b", bValue))
             {
-                await stub.PutState("a", aValue.ToString().ToByteString()); // TODO: Better conversion stuff
-                await stub.PutState("b", bValue.ToString().ToByteString());
                 return Shim.Success();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error during Chaincode init");
-                return Shim.Error(ex.ToString());
-            }
+
+            return Shim.Error("Error during Chaincode init!");
         }
 
         public async Task<Response> Invoke(IChaincodeStub stub)
@@ -80,11 +75,11 @@ namespace Chaincode.NET.Sample
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during Chaincode invocation");
-                return Shim.Error(ex.ToString());
+                return Shim.Error(ex);
             }
         }
 
-        private async Task<ByteString> InternalQuery(IChaincodeStub stub, IList<string> args)
+        private async Task<ByteString> InternalQuery(IChaincodeStub stub, Parameters args)
         {
             if (args.Count != 1)
             {
@@ -97,22 +92,22 @@ namespace Chaincode.NET.Sample
 
             if (aValueBytes == null)
             {
-                throw new Exception("Failed to get state of asset holder A");
+                throw new Exception($"Failed to get state of asset holder {a}");
             }
 
             _logger.LogInformation($"Query Response: name={a}, value={aValueBytes.ToStringUtf8()}");
             return aValueBytes;
         }
 
-        private async Task<ByteString> InternalInvoke(IChaincodeStub stub, IList<string> args)
+        private async Task<ByteString> InternalInvoke(IChaincodeStub stub, Parameters args)
         {
             if (args.Count != 3)
             {
                 throw new Exception("Incorrect number of arguments. Expecting 3");
             }
 
-            var a = args[0];
-            var b = args[1];
+            var a = args.Get<string>(0);
+            var b = args.Get<string>(0);
 
             if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
             {
@@ -127,16 +122,13 @@ namespace Chaincode.NET.Sample
 
             var aValue = int.Parse(aValueBytes.ToStringUtf8());
 
-
-            var bValueBytes = await stub.GetState(b);
-            if (bValueBytes == null)
+            var bValue = await stub.TryGetState<int>(b);
+            if (!bValue.HasValue)
             {
                 throw new Exception("Failed to get state of asset holder B");
             }
 
-            var bValue = int.Parse(bValueBytes.ToStringUtf8());
-
-            if (!int.TryParse(args[2], out var amount))
+            if (!args.TryGet<int>(2, out var amount))
             {
                 throw new Exception("Expecting integer value for amount to be transferred");
             }
@@ -146,8 +138,8 @@ namespace Chaincode.NET.Sample
 
             _logger.LogInformation($"aValue = {aValue}, bValue = {bValue}");
 
-            await stub.PutState(a, aValue.ToString().ToByteString());
-            await stub.PutState(b, bValue.ToString().ToByteString());
+            await stub.PutState(a, aValue);
+            await stub.PutState(b, bValue);
 
             return ByteString.Empty;
         }
