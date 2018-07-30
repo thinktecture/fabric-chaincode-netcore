@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Google.Protobuf;
 
-namespace Chaincode.NET.Protos.Extensions
+namespace Chaincode.NET.Extensions
 {
     public static class StringExtensions
     {

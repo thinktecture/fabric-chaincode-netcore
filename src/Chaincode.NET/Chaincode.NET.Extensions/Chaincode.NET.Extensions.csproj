@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Google.Protobuf, Version=3.6.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\google.protobuf\3.6.0\lib\netstandard1.0\Google.Protobuf.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

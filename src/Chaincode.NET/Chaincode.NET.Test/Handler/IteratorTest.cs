@@ -1,7 +1,7 @@
 using System;
+using Chaincode.NET.Extensions;
 using Chaincode.NET.Handler;
 using Chaincode.NET.Handler.Iterators;
-using Chaincode.NET.Protos.Extensions;
 using FluentAssertions;
 using Google.Protobuf;
 using Moq;

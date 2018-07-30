@@ -1,6 +1,6 @@
 using System;
 using Chaincode.NET.Chaincode;
-using Chaincode.NET.Protos.Extensions;
+using Chaincode.NET.Extensions;
 using FluentAssertions;
 using Moq;
 using Msp;

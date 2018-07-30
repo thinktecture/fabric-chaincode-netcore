@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
+using Chaincode.NET.Extensions;
 using Chaincode.NET.Handler;
-using Chaincode.NET.Protos.Extensions;
 using Chaincode.NET.Settings;
 using FluentAssertions;
 using Google.Protobuf;
