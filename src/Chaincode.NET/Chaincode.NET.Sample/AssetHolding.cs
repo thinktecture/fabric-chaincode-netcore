@@ -35,13 +35,12 @@ namespace Chaincode.NET.Sample
 
             args.AssertCount(4);
 
-            if (!args.TryGet<int>(1, out var aValue) || 
+            if (!args.TryGet<int>(1, out var aValue) ||
                 !args.TryGet<int>(3, out var bValue))
             {
                 return Shim.Error("Expecting integer value for asset holding");
             }
 
-          
 
             if (await stub.PutState("a", aValue) && await stub.PutState("b", bValue))
             {

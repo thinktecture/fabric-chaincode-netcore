@@ -178,7 +178,7 @@ namespace Chaincode.NET.Sample
             car.Owner = args.Get<string>(1);
 
             await stub.PutStateJson(args.Get<string>(0), car);
-            
+
             return ByteString.Empty;
         }
     }
