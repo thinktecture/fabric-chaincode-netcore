@@ -216,7 +216,7 @@ namespace Chaincode.NET.Chaincode
 
             using (var sha256 = SHA256.Create())
             {
-                return sha256.ComputeHash(total.ToArray()).ByteArrayToString();
+                return sha256.ComputeHash(total.ToArray()).ByteArrayToHexString();
             }
         }
 
