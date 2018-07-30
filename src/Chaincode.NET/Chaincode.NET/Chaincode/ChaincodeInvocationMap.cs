@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Chaincode.NET.Handler;
 using Google.Protobuf;
+using Microsoft.Extensions.Logging;
 using Protos;
 
 namespace Chaincode.NET.Chaincode
@@ -11,7 +12,13 @@ namespace Chaincode.NET.Chaincode
 
     public class ChaincodeInvocationMap : Dictionary<string, ChaincodeInvocationDelegate>
     {
-        public async Task<Response> Invoke(IChaincodeStub stub)
+        public ChaincodeInvocationMap()
+         : base(StringComparer.OrdinalIgnoreCase)
+        {
+            
+        }
+        
+        public virtual async Task<Response> Invoke(IChaincodeStub stub)
         {
             var functionParameterInformation = stub.GetFunctionAndParameters();
 
@@ -31,6 +38,27 @@ namespace Chaincode.NET.Chaincode
             {
                 return Shim.Error(ex);
             }
+        }
+    }
+
+    public class LoggingChaincodeInvocationMap : ChaincodeInvocationMap
+    {
+        private readonly ILogger<IChaincode> _logger;
+
+        public LoggingChaincodeInvocationMap(ILogger<IChaincode> logger)
+        {
+            _logger = logger;
+        }
+        
+        public override async Task<Response> Invoke(IChaincodeStub stub)
+        {
+            var function = stub.GetFunctionAndParameters().Function;
+            
+            _logger.LogInformation($"========== START: {function} ==========");
+            var result = await base.Invoke(stub);
+            _logger.LogInformation($"========== END: {function} ==========");
+
+            return result;
         }
     }
 }

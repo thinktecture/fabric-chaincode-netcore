@@ -1,10 +1,16 @@
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Chaincode.NET.Chaincode;
+using Newtonsoft.Json;
 
 namespace Chaincode.NET.Extensions
 {
     public static class ChaincodeStubExtensions
     {
+        public static async Task<T> GetStateJson<T>(this IChaincodeStub stub, string key)
+            where T : class
+            => JsonConvert.DeserializeObject<T>(await stub.GetState<string>(key));
+
         public static async Task<T> GetState<T>(this IChaincodeStub stub, string key)
         {
             var stateResult = await stub.GetState(key);
@@ -27,6 +33,10 @@ namespace Chaincode.NET.Extensions
 
         public static async Task<bool> DeleteState(this IChaincodeStub stub, string key) =>
             await stub.DeleteState(key).InvokeSafe();
+
+        public static Task<bool> PutStateJson<T>(this IChaincodeStub stub, string key, T value)
+            where T : class
+            => stub.PutState(key, JsonConvert.SerializeObject(value));
 
         public static async Task<bool> PutState<T>(this IChaincodeStub stub, string key, T value) =>
             await stub.PutState(key, value.ToString().ToByteString()).InvokeSafe();
