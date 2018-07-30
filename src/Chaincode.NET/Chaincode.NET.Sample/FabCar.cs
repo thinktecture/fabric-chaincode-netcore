@@ -34,7 +34,6 @@ namespace Chaincode.NET.Sample
         public override string ToString() => $"{Make} {Model} in {Color} with owner {Owner}";
     }
 
-    // To test, use the node.js invocation sample
     public class FabCar : IChaincode
     {
         private readonly ILogger<FabCar> _logger;
