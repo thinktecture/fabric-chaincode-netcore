@@ -20,7 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chaincode.NET\Chaincode.NET.csproj" />
+        <ProjectReference Include="..\Chaincode.NET\Chaincode.NET.csproj"/>
+        <ProjectReference Include="..\Chaincode.NET.Protos\Chaincode.NET.Protos.csproj" PrivateAssets="all"/>
     </ItemGroup>
 
 </Project>
