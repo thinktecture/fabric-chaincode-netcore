@@ -16,6 +16,7 @@
         <PackageIconUrl>http://thinktecture.com/images/Logo_T_Nontransparent.png</PackageIconUrl>
         <RepositoryUrl>git@github.com:thinktecture/fabric-chaincode-netcore.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,7 +34,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chaincode.NET.Protos\Chaincode.NET.Protos.csproj" />
+      <ProjectReference Include="..\Chaincode.NET.Protos\Chaincode.NET.Protos.csproj" PrivateAssets="all" />
     </ItemGroup>
 
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+        <ItemGroup>
+            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+        </ItemGroup>
+    </Target>
 </Project>
