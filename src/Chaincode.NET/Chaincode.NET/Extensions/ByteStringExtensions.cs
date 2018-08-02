@@ -9,10 +9,7 @@ namespace Chaincode.NET.Extensions
         {
             var stringValue = byteString.ToStringUtf8();
 
-            if (stringValue is T t)
-            {
-                return t;
-            }
+            if (stringValue is T t) return t;
 
             return (T) System.Convert.ChangeType(stringValue, typeof(T), CultureInfo.InvariantCulture);
         }

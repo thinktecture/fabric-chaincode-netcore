@@ -12,8 +12,14 @@ namespace Chaincode.NET.Chaincode
 {
     public class ClientIdentity : IClientIdentity
     {
-        private readonly IChaincodeStub _chaincodeStub;
         private const string FabricCertAttrOid = "1.2.3.4.5.6.7.8.1";
+        private readonly IChaincodeStub _chaincodeStub;
+
+        public ClientIdentity(IChaincodeStub chaincodeStub)
+        {
+            _chaincodeStub = chaincodeStub;
+            LoadFromStub();
+        }
 
         public string Id { get; private set; }
         public string Mspid { get; private set; }
@@ -22,17 +28,15 @@ namespace Chaincode.NET.Chaincode
         public IDictionary<string, string> Attributes { get; private set; } =
             new ConcurrentDictionary<string, string>();
 
-        public ClientIdentity(IChaincodeStub chaincodeStub)
+        public string GetAttributeValue(string attributeName)
         {
-            _chaincodeStub = chaincodeStub;
-            LoadFromStub();
+            return Attributes.TryGetValue(attributeName, out var value) ? value : null;
         }
 
-        public string GetAttributeValue(string attributeName) =>
-            Attributes.TryGetValue(attributeName, out var value) ? value : null;
-
-        public bool AssertAttributeValue(string attributeName, string attributeValue) =>
-            GetAttributeValue(attributeName) == attributeValue;
+        public bool AssertAttributeValue(string attributeName, string attributeValue)
+        {
+            return GetAttributeValue(attributeName) == attributeValue;
+        }
 
         private void LoadFromStub()
         {
@@ -52,11 +56,9 @@ namespace Chaincode.NET.Chaincode
                 var attributeObject = JsonConvert.DeserializeObject<JObject>(attributesJsonString);
 
                 if (attributeObject.ContainsKey("attrs"))
-                {
                     Attributes = attributeObject.Value<JObject>("attrs")
                         .Properties()
                         .ToDictionary(token => token.Name, token => token.Value.ToString());
-                }
             }
 
             Id = $"x509::/{X509Certificate.Subject}::/{X509Certificate.Issuer}";
@@ -68,16 +70,11 @@ namespace Chaincode.NET.Chaincode
                 @"(\-\-\-\-\-\s*BEGIN ?[^-]+?\-\-\-\-\-)([\s\S]*)(\-\-\-\-\-\s*END ?[^-]+?\-\-\-\-\-)");
 
             if (!matches.Success || matches.Groups.Count != 4)
-            {
                 throw new Exception("Failed to find start line or end line of the certificate.");
-            }
 
             var trimmedMatches = new string[3];
 
-            for (var i = 1; i < matches.Groups.Count; i++)
-            {
-                trimmedMatches[i - 1] = matches.Groups[i].Value.Trim();
-            }
+            for (var i = 1; i < matches.Groups.Count; i++) trimmedMatches[i - 1] = matches.Groups[i].Value.Trim();
 
             return $"{string.Join("\n", trimmedMatches)}\n";
         }

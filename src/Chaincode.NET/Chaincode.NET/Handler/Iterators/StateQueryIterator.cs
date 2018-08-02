@@ -10,6 +10,9 @@ namespace Chaincode.NET.Handler.Iterators
         {
         }
 
-        protected override KV GetResultFromBytes(QueryResultBytes bytes) => KV.Parser.ParseFrom(bytes.ResultBytes);
+        protected override KV GetResultFromBytes(QueryResultBytes bytes)
+        {
+            return KV.Parser.ParseFrom(bytes.ResultBytes);
+        }
     }
 }

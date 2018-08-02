@@ -10,9 +10,11 @@ namespace Chaincode.NET.Handler
 {
     public interface IHandler
     {
+        IClientStreamWriter<ChaincodeMessage> WriteStream { get; }
+
+        States State { get; set; } // For testing only, will be removed with the impl. of a message handler
         void Close();
         Task Chat(ChaincodeMessage conversationStarterMessage);
-        IClientStreamWriter<ChaincodeMessage> WriteStream { get; }
         object ParseResponse(ChaincodeMessage response, MessageMethod messageMethod);
         Task<ByteString> HandleGetState(string collection, string key, string channelId, string txId);
         Task<ByteString> HandlePutState(string collection, string key, ByteString value, string channelId, string txId);
@@ -37,7 +39,5 @@ namespace Chaincode.NET.Handler
             string channelId,
             string txId
         );
-
-        States State { get; set; } // For testing only, will be removed with the impl. of a message handler
     }
 }

@@ -6,17 +6,12 @@ namespace Chaincode.NET.Handler.Iterators
 {
     public abstract class CommonIterator<T>
     {
-        private readonly IHandler _handler;
         private readonly string _channelId;
+        private readonly IHandler _handler;
         private readonly string _txId;
-        private QueryResponse _response;
         private readonly IteratorType _type;
         private int _currentLocation;
-
-        // TODO: Change Node style events into more suitable C# stuff? 
-        public event Action<QueryResult<T>> Data;
-        public event Action End;
-        public event Action<Exception> Error;
+        private QueryResponse _response;
 
         protected CommonIterator(
             IHandler handler,
@@ -33,17 +28,36 @@ namespace Chaincode.NET.Handler.Iterators
             _type = type;
         }
 
-        private void OnData(QueryResult<T> obj) => Data?.Invoke(obj);
-        private void OnEnd() => End?.Invoke();
-        private void OnError(Exception exception) => Error?.Invoke(exception);
+        // TODO: Change Node style events into more suitable C# stuff? 
+        public event Action<QueryResult<T>> Data;
+        public event Action End;
+        public event Action<Exception> Error;
 
-        public Task<QueryResponse> Close() => _handler.HandleQueryCloseState(_response.Id, _channelId, _txId);
+        private void OnData(QueryResult<T> obj)
+        {
+            Data?.Invoke(obj);
+        }
+
+        private void OnEnd()
+        {
+            End?.Invoke();
+        }
+
+        private void OnError(Exception exception)
+        {
+            Error?.Invoke(exception);
+        }
+
+        public Task<QueryResponse> Close()
+        {
+            return _handler.HandleQueryCloseState(_response.Id, _channelId, _txId);
+        }
 
         protected abstract T GetResultFromBytes(QueryResultBytes bytes);
 
         private QueryResult<T> CreateAndEmitResult()
         {
-            var result = new QueryResult<T>()
+            var result = new QueryResult<T>
             {
                 Value = GetResultFromBytes(_response.Results[_currentLocation])
             };
@@ -59,15 +73,12 @@ namespace Chaincode.NET.Handler.Iterators
 
         public async Task<QueryResult<T>> Next()
         {
-            if (_currentLocation < _response.Results.Count)
-            {
-                return CreateAndEmitResult();
-            }
+            if (_currentLocation < _response.Results.Count) return CreateAndEmitResult();
 
             if (!_response.HasMore)
             {
                 OnEnd();
-                return new QueryResult<T>() {Done = true};
+                return new QueryResult<T> {Done = true};
             }
 
             try
@@ -80,10 +91,7 @@ namespace Chaincode.NET.Handler.Iterators
             catch (Exception ex)
             {
                 // Only throw if we don't have a handle for the error event, otherwise emit an error
-                if (Error == null)
-                {
-                    throw;
-                }
+                if (Error == null) throw;
 
                 OnError(ex);
                 return null;

@@ -22,7 +22,7 @@ namespace Chaincode.NET.Test.Messaging
         [Fact]
         public void MessageTxContextId_is_built_by_MessageChannelId_and_MessageTxid()
         {
-            var sut = new QueueMessage(new ChaincodeMessage()
+            var sut = new QueueMessage(new ChaincodeMessage
             {
                 ChannelId = "foo",
                 Txid = "bar"
@@ -35,17 +35,6 @@ namespace Chaincode.NET.Test.Messaging
     public class QueueMessageGenericTest
     {
         [Fact]
-        public async Task Success_should_result_of_TaskCompletionSource()
-        {
-            var taskCompletionSource = new TaskCompletionSource<int>();
-            var sut = new QueueMessage<int>(null, 0, taskCompletionSource);
-            sut.Success(100);
-
-            var result = await taskCompletionSource.Task;
-            result.Should().Be(100);
-        }
-
-        [Fact]
         public void Fail_should_set_exception_of_TaskCompletionSource()
         {
             var taskCompletionSource = new TaskCompletionSource<int>();
@@ -55,6 +44,17 @@ namespace Chaincode.NET.Test.Messaging
             taskCompletionSource.Awaiting(t => t.Task)
                 .Should().Throw<Exception>()
                 .WithMessage("something went wrong");
+        }
+
+        [Fact]
+        public async Task Success_should_result_of_TaskCompletionSource()
+        {
+            var taskCompletionSource = new TaskCompletionSource<int>();
+            var sut = new QueueMessage<int>(null, 0, taskCompletionSource);
+            sut.Success(100);
+
+            var result = await taskCompletionSource.Task;
+            result.Should().Be(100);
         }
     }
 }

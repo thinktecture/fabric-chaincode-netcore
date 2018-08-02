@@ -63,67 +63,13 @@ namespace Chaincode.NET.Test.Chaincode
         {
             var mock = new Mock<IChaincodeStub>();
             mock.Setup(m => m.Creator)
-                .Returns(new SerializedIdentity()
+                .Returns(new SerializedIdentity
                 {
                     Mspid = "dummyId",
                     IdBytes = certificate.ToByteString()
                 });
 
             return mock;
-        }
-
-        [Fact]
-        public void ClientIdentity_with_valid_certificate_and_attributes_is_loaded_correctly()
-        {
-            var stubMock = CreateChaincodeStubMock(CertificateWithAttributes);
-
-            var sut = new ClientIdentity(stubMock.Object);
-
-            sut.Mspid.Should().Be("dummyId");
-            sut.Id.Should().Be("x509::/CN=MyTestUserWithAttrs::/CN=fabric-ca-server");
-            sut.X509Certificate.SerialNumber.Should().Be("1E4998E9F44FD00353BF3681C0A0A431964F5275");
-            sut.Attributes["attr1"].Should().Be("val1");
-            sut.GetAttributeValue("attr1").Should().Be("val1");
-            sut.GetAttributeValue("unknown").Should().BeNullOrEmpty();
-            sut.AssertAttributeValue("attr1", "val1").Should().BeTrue();
-            sut.AssertAttributeValue("unknown", "val1").Should().BeFalse();
-            sut.AssertAttributeValue("attr1", "wrongValue").Should().BeFalse();
-        }
-
-        [Fact]
-        public void ClientIdentity_with_valid_certificate_without_attributes_is_loaded_correctly()
-        {
-            var stubMock = CreateChaincodeStubMock(CertificateWithoutAttributes);
-
-            var sut = new ClientIdentity(stubMock.Object);
-
-            sut.Mspid.Should().Be("dummyId");
-            sut.Attributes.Count.Should().Be(0);
-        }
-
-        [Fact]
-        public void ClientIdentity_with_valid_certificate_and_long_dns_is_loaded_correctly()
-        {
-            var stubMock = CreateChaincodeStubMock(CertificateWithLongDNs);
-
-            var sut = new ClientIdentity(stubMock.Object);
-
-            // TODO: Check if this is ok: The format of the subject string differs from Node.js
-            sut.Mspid.Should().Be("dummyId");
-            sut.Id.Should()
-                .Be(
-                    "x509::/CN=User1@org2.example.com, L=San Francisco, S=California, C=US::/CN=ca.org2.example.com, O=org2.example.com, L=San Francisco, S=California, C=US");
-        }
-
-        [Fact]
-        public void ClientIdentity_throws_an_error_when_certificate_is_empty()
-        {
-            var stubMock = CreateChaincodeStubMock(string.Empty);
-
-            Action action = () => new ClientIdentity(stubMock.Object);
-
-            action.Should().Throw<Exception>()
-                .WithMessage("Failed to find start line or end line of the certificate.");
         }
 
         [Fact]
@@ -150,6 +96,60 @@ namespace Chaincode.NET.Test.Chaincode
 
             action.Should().Throw<Exception>()
                 .WithMessage("Failed to find start line or end line of the certificate.");
+        }
+
+        [Fact]
+        public void ClientIdentity_throws_an_error_when_certificate_is_empty()
+        {
+            var stubMock = CreateChaincodeStubMock(string.Empty);
+
+            Action action = () => new ClientIdentity(stubMock.Object);
+
+            action.Should().Throw<Exception>()
+                .WithMessage("Failed to find start line or end line of the certificate.");
+        }
+
+        [Fact]
+        public void ClientIdentity_with_valid_certificate_and_attributes_is_loaded_correctly()
+        {
+            var stubMock = CreateChaincodeStubMock(CertificateWithAttributes);
+
+            var sut = new ClientIdentity(stubMock.Object);
+
+            sut.Mspid.Should().Be("dummyId");
+            sut.Id.Should().Be("x509::/CN=MyTestUserWithAttrs::/CN=fabric-ca-server");
+            sut.X509Certificate.SerialNumber.Should().Be("1E4998E9F44FD00353BF3681C0A0A431964F5275");
+            sut.Attributes["attr1"].Should().Be("val1");
+            sut.GetAttributeValue("attr1").Should().Be("val1");
+            sut.GetAttributeValue("unknown").Should().BeNullOrEmpty();
+            sut.AssertAttributeValue("attr1", "val1").Should().BeTrue();
+            sut.AssertAttributeValue("unknown", "val1").Should().BeFalse();
+            sut.AssertAttributeValue("attr1", "wrongValue").Should().BeFalse();
+        }
+
+        [Fact]
+        public void ClientIdentity_with_valid_certificate_and_long_dns_is_loaded_correctly()
+        {
+            var stubMock = CreateChaincodeStubMock(CertificateWithLongDNs);
+
+            var sut = new ClientIdentity(stubMock.Object);
+
+            // TODO: Check if this is ok: The format of the subject string differs from Node.js
+            sut.Mspid.Should().Be("dummyId");
+            sut.Id.Should()
+                .Be(
+                    "x509::/CN=User1@org2.example.com, L=San Francisco, S=California, C=US::/CN=ca.org2.example.com, O=org2.example.com, L=San Francisco, S=California, C=US");
+        }
+
+        [Fact]
+        public void ClientIdentity_with_valid_certificate_without_attributes_is_loaded_correctly()
+        {
+            var stubMock = CreateChaincodeStubMock(CertificateWithoutAttributes);
+
+            var sut = new ClientIdentity(stubMock.Object);
+
+            sut.Mspid.Should().Be("dummyId");
+            sut.Attributes.Count.Should().Be(0);
         }
     }
 }

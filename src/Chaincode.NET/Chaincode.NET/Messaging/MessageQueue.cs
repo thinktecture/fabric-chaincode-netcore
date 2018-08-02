@@ -27,12 +27,18 @@ namespace Chaincode.NET.Messaging
 
             messageQueue.Enqueue(queueMessage);
 
-            if (messageQueue.Count == 1)
-            {
-                return SendMessage(queueMessage.MessageTxContextId);
-            }
+            if (messageQueue.Count == 1) return SendMessage(queueMessage.MessageTxContextId);
 
             return Task.CompletedTask;
+        }
+
+        public void HandleMessageResponse(ChaincodeMessage response)
+        {
+            var messageTxContextId = response.ChannelId + response.Txid;
+
+            var message = GetCurrentMessage(messageTxContextId) as dynamic; // TODO: This needs to be done better
+
+            HandleResponseMessage(message, messageTxContextId, response);
         }
 
         private Task SendMessage(string messageTxContextId)
@@ -56,9 +62,7 @@ namespace Chaincode.NET.Messaging
         {
             if (_txQueues.TryGetValue(messageTxContextId, out var messageQueue) &&
                 messageQueue.TryPeek(out var message))
-            {
                 return message;
-            }
 
             _logger.LogError($"Failed to find a message for transaction context id {messageTxContextId}");
             return null;
@@ -77,15 +81,6 @@ namespace Chaincode.NET.Messaging
             }
 
             SendMessage(messageTxContextId);
-        }
-
-        public void HandleMessageResponse(ChaincodeMessage response)
-        {
-            var messageTxContextId = response.ChannelId + response.Txid;
-
-            var message = GetCurrentMessage(messageTxContextId) as dynamic; // TODO: This needs to be done better
-
-            HandleResponseMessage(message, messageTxContextId, response);
         }
 
         private void HandleResponseMessage<T>(

@@ -11,14 +11,13 @@ namespace Chaincode.NET.Sample
 {
     public class AssetHolding : IChaincode
     {
-        private readonly ILogger<AssetHolding> _logger;
-
         private readonly ChaincodeInvocationMap _invocationMap;
+        private readonly ILogger<AssetHolding> _logger;
 
         public AssetHolding(ILogger<AssetHolding> logger)
         {
             _logger = logger;
-            _invocationMap = new ChaincodeInvocationMap()
+            _invocationMap = new ChaincodeInvocationMap
             {
                 {"invoke", InternalInvoke},
                 {"query", InternalQuery}
@@ -37,15 +36,10 @@ namespace Chaincode.NET.Sample
 
             if (!args.TryGet<int>(1, out var aValue) ||
                 !args.TryGet<int>(3, out var bValue))
-            {
                 return Shim.Error("Expecting integer value for asset holding");
-            }
 
 
-            if (await stub.PutState("a", aValue) && await stub.PutState("b", bValue))
-            {
-                return Shim.Success();
-            }
+            if (await stub.PutState("a", aValue) && await stub.PutState("b", bValue)) return Shim.Success();
 
             return Shim.Error("Error during Chaincode init!");
         }
@@ -64,10 +58,7 @@ namespace Chaincode.NET.Sample
 
             var aValueBytes = await stub.GetState(a);
 
-            if (aValueBytes == null)
-            {
-                throw new Exception($"Failed to get state of asset holder {a}");
-            }
+            if (aValueBytes == null) throw new Exception($"Failed to get state of asset holder {a}");
 
             _logger.LogInformation($"Query Response: name={a}, value={aValueBytes.ToStringUtf8()}");
             return aValueBytes;
@@ -81,26 +72,16 @@ namespace Chaincode.NET.Sample
             var b = args.Get<string>(1);
 
             if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
-            {
                 throw new Exception("Asset holding must not be empty");
-            }
 
             var aValue = await stub.TryGetState<int>(a);
-            if (!aValue.HasValue)
-            {
-                throw new Exception("Failed to get state of asset holder A");
-            }
+            if (!aValue.HasValue) throw new Exception("Failed to get state of asset holder A");
 
             var bValue = await stub.TryGetState<int>(b);
-            if (!bValue.HasValue)
-            {
-                throw new Exception("Failed to get state of asset holder B");
-            }
+            if (!bValue.HasValue) throw new Exception("Failed to get state of asset holder B");
 
             if (!args.TryGet<int>(2, out var amount))
-            {
                 throw new Exception("Expecting integer value for amount to be transferred");
-            }
 
             aValue -= amount;
             bValue += amount;

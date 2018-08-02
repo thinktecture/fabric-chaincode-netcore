@@ -4,6 +4,10 @@
         <TargetFramework>netcoreapp2.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.NET</AssemblyName>
+
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.NET</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

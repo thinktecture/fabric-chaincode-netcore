@@ -13,9 +13,9 @@ namespace Chaincode.NET.Handler
 {
     public class Shim
     {
-        private readonly ILogger<Shim> _logger;
-        private readonly IHandlerFactory _handlerFactory;
         private readonly ChaincodeSettings _chaincodeSettings;
+        private readonly IHandlerFactory _handlerFactory;
+        private readonly ILogger<Shim> _logger;
 
         public Shim(
             IOptions<ChaincodeSettings> chaincodeSettings,
@@ -29,10 +29,7 @@ namespace Chaincode.NET.Handler
             _handlerFactory = handlerFactory ?? throw new ArgumentNullException(nameof(handlerFactory));
             _chaincodeSettings = chaincodeSettings.Value;
 
-            if (_chaincodeSettings.LogGrpc)
-            {
-                GrpcEnvironment.SetLogger(new ConsoleLogger());
-            }
+            if (_chaincodeSettings.LogGrpc) GrpcEnvironment.SetLogger(new ConsoleLogger());
         }
 
         public async Task<IHandler> Start()
@@ -49,7 +46,7 @@ namespace Chaincode.NET.Handler
                                    $"{url.Host}:{url.Port} as chaincode " +
                                    $"{_chaincodeSettings.ChaincodeIdName}");
 
-            await handler.Chat(new ChaincodeMessage()
+            await handler.Chat(new ChaincodeMessage
             {
                 Type = ChaincodeMessage.Types.Type.Register,
                 Payload = chaincodeId.ToByteString()
@@ -61,34 +58,42 @@ namespace Chaincode.NET.Handler
         private (string Host, int Port) ParseUrl(string peerAddress)
         {
             if (peerAddress.Contains("://"))
-            {
                 throw new Exception("Peer Address should not contain any protocol information.");
-            }
 
             var split = peerAddress.Split(':');
 
             if (split.Length != 2)
-            {
                 throw new ArgumentException("Please provide peer address in the format of host:port");
-            }
 
             return (split[0], int.Parse(split[1]));
         }
 
-        public static Response Success() => Success(ByteString.Empty);
-
-        public static Response Success(ByteString payload) => new Response()
+        public static Response Success()
         {
-            Status = (int) ResponseCodes.Ok,
-            Payload = payload
-        };
+            return Success(ByteString.Empty);
+        }
 
-        public static Response Error(string message) => new Response()
+        public static Response Success(ByteString payload)
         {
-            Status = (int) ResponseCodes.Error,
-            Message = message
-        };
+            return new Response
+            {
+                Status = (int) ResponseCodes.Ok,
+                Payload = payload
+            };
+        }
 
-        public static Response Error(Exception exception) => Error(exception.ToString());
+        public static Response Error(string message)
+        {
+            return new Response
+            {
+                Status = (int) ResponseCodes.Error,
+                Message = message
+            };
+        }
+
+        public static Response Error(Exception exception)
+        {
+            return Error(exception.ToString());
+        }
     }
 }

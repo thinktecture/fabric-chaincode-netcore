@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Chaincode.NET.Sample
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             using (var providerConfiguration = ProviderConfiguration.Configure<FabCar>(args))
             {

@@ -7,13 +7,10 @@ namespace Chaincode.NET.Chaincode
     {
         public void AssertCount(int count)
         {
-            if (Count != count)
-            {
-                throw new Exception($"Incorrect number of arguments. Expecting {count}, got {Count}");
-            }
+            if (Count != count) throw new Exception($"Incorrect number of arguments. Expecting {count}, got {Count}");
         }
-    }   
-    
+    }
+
     public class ChaincodeFunctionParameterInformation
     {
         public string Function { get; set; }

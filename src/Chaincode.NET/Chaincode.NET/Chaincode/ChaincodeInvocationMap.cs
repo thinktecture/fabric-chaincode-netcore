@@ -13,20 +13,17 @@ namespace Chaincode.NET.Chaincode
     public class ChaincodeInvocationMap : Dictionary<string, ChaincodeInvocationDelegate>
     {
         public ChaincodeInvocationMap()
-         : base(StringComparer.OrdinalIgnoreCase)
+            : base(StringComparer.OrdinalIgnoreCase)
         {
-            
         }
-        
+
         public virtual async Task<Response> Invoke(IChaincodeStub stub)
         {
             var functionParameterInformation = stub.GetFunctionAndParameters();
 
             if (!ContainsKey(functionParameterInformation.Function))
-            {
                 return Shim.Error(
                     $"Chaincode invoked with unknown method name: {functionParameterInformation.Function}");
-            }
 
             try
             {
@@ -49,11 +46,11 @@ namespace Chaincode.NET.Chaincode
         {
             _logger = logger;
         }
-        
+
         public override async Task<Response> Invoke(IChaincodeStub stub)
         {
             var function = stub.GetFunctionAndParameters().Function;
-            
+
             _logger.LogInformation($"========== START: {function} ==========");
             var result = await base.Invoke(stub);
             _logger.LogInformation($"========== END: {function} ==========");

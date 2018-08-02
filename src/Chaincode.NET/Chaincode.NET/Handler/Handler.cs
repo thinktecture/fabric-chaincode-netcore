@@ -17,18 +17,13 @@ namespace Chaincode.NET.Handler
 {
     public class Handler : IHandler
     {
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private readonly IChaincode _chaincode;
         private readonly IChaincodeStubFactory _chaincodeStubFactory;
-        private readonly IMessageQueue _messageQueue;
-        private readonly ILogger _logger;
         private readonly ChaincodeSupport.ChaincodeSupportClient _client;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ILogger _logger;
+        private readonly IMessageQueue _messageQueue;
         private AsyncDuplexStreamingCall<ChaincodeMessage, ChaincodeMessage> _stream;
-
-        // For testing only, will be removed with the impl. of a message handler
-        public States State { get; set; } = States.Created;
-
-        public IClientStreamWriter<ChaincodeMessage> WriteStream => _stream.RequestStream;
 
         public Handler(
             IChaincode chaincode,
@@ -46,12 +41,17 @@ namespace Chaincode.NET.Handler
 
             // TODO: Secure channel?
             _client = chaincodeSupportClientFactory.Create(new Channel(host, port, ChannelCredentials.Insecure,
-                new List<ChannelOption>()
+                new List<ChannelOption>
                 {
                     new ChannelOption("request-timeout", 30000)
                 }));
             _messageQueue = messageQueueFactory.Create(this);
         }
+
+        // For testing only, will be removed with the impl. of a message handler
+        public States State { get; set; } = States.Created;
+
+        public IClientStreamWriter<ChaincodeMessage> WriteStream => _stream.RequestStream;
 
         public void Close()
         {
@@ -90,7 +90,7 @@ namespace Chaincode.NET.Handler
                             else if (type == ChaincodeMessage.Types.Type.Init)
                             {
                                 _logger.LogDebug($"[{message.ChannelId}-{message.Txid}], Received {message.Type}, " +
-                                                 $"initializing chaincode");
+                                                 "initializing chaincode");
 #pragma warning disable 4014
                                 HandleInit(message);
 #pragma warning restore 4014
@@ -154,135 +154,6 @@ namespace Chaincode.NET.Handler
             }, _cancellationTokenSource.Token);
         }
 
-        private Task HandleTransaction(ChaincodeMessage message)
-        {
-            return HandleMessage(message, HandleMessageAction.Invoke);
-        }
-
-        private Task HandleInit(ChaincodeMessage message)
-        {
-            return HandleMessage(message, HandleMessageAction.Init);
-        }
-
-        private async Task HandleMessage(ChaincodeMessage message, HandleMessageAction action)
-        {
-            ChaincodeMessage nextMessage = null;
-            ChaincodeInput input = null;
-
-            try
-            {
-                input = ChaincodeInput.Parser.ParseFrom(message.Payload);
-            }
-            catch
-            {
-                _logger.LogError(
-                    $"{message.ChannelId}-{message.Txid} Incorrect payload format. Sending ERROR message back to peer");
-                nextMessage = new ChaincodeMessage()
-                {
-                    Txid = message.Txid,
-                    ChannelId = message.ChannelId,
-                    Type = ChaincodeMessage.Types.Type.Error,
-                    Payload = message.Payload
-                };
-            }
-
-            if (input == null)
-            {
-                await WriteStream.WriteAsync(nextMessage);
-                return;
-            }
-
-            IChaincodeStub stub = null;
-            try
-            {
-                stub = _chaincodeStubFactory.Create(this, message.ChannelId, message.Txid, input,
-                    message.Proposal);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to construct a chaincode stub instance for the INIT message: {ex}");
-                nextMessage = new ChaincodeMessage()
-                {
-                    Type = ChaincodeMessage.Types.Type.Error,
-                    Payload = ex.ToString().ToByteString(),
-                    Txid = message.Txid,
-                    ChannelId = message.ChannelId
-                };
-            }
-
-            if (stub == null)
-            {
-                await WriteStream.WriteAsync(nextMessage);
-                return;
-            }
-
-            Response response;
-            if (action == HandleMessageAction.Init)
-            {
-                response = await _chaincode.Init(stub);
-            }
-            else
-            {
-                response = await _chaincode.Invoke(stub);
-            }
-
-            if (response.Status == 0)
-            {
-                var errorMessage = $"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
-                                   $"has not called success or error";
-                _logger.LogError(errorMessage);
-                response = Shim.Error(errorMessage);
-            }
-
-            _logger.LogInformation($"[{message.ChaincodeEvent}]-{message.Txid} Calling chaincode {action}, " +
-                                   $"response status {response.Status}");
-
-            if (response.Status >= (int) ResponseCodes.Error)
-            {
-                _logger.LogError($"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
-                                 $"returned error response {response.Message}. " +
-                                 "Sending ERROR message back to peer");
-
-                nextMessage = new ChaincodeMessage()
-                {
-                    Type = ChaincodeMessage.Types.Type.Error,
-                    Payload = response.Message.ToByteString(),
-                    Txid = message.Txid,
-                    ChannelId = message.ChannelId
-                };
-            }
-            else
-            {
-                _logger.LogInformation($"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
-                                       $"succeeded. Sending COMPLETED message back to peer");
-                nextMessage = new ChaincodeMessage()
-                {
-                    Type = ChaincodeMessage.Types.Type.Completed,
-                    Payload = response.ToByteString(),
-                    Txid = message.Txid,
-                    ChannelId = message.ChannelId,
-                    ChaincodeEvent = stub.ChaincodeEvent
-                };
-            }
-
-            await WriteStream.WriteAsync(nextMessage);
-        }
-
-        private ChaincodeMessage NewErrorMessage(ChaincodeMessage message, States state)
-        {
-            var errorString = $"[{message.ChannelId}-{message.Txid}] Chaincode Handler FSM cannot " +
-                              $"handle message ({message.Type}, with payload size {message.Payload.Length} " +
-                              $"while in state {state}";
-
-            return new ChaincodeMessage()
-            {
-                Type = ChaincodeMessage.Types.Type.Error,
-                Payload = errorString.ToByteString(),
-                Txid = message.Txid,
-                ChannelId = message.ChannelId
-            };
-        }
-
         public object ParseResponse(ChaincodeMessage response, MessageMethod messageMethod)
         {
             if (response.Type == ChaincodeMessage.Types.Type.Response)
@@ -329,7 +200,7 @@ namespace Chaincode.NET.Handler
 
         public Task<ByteString> HandleGetState(string collection, string key, string channelId, string txId)
         {
-            var payload = new GetState()
+            var payload = new GetState
             {
                 Key = key,
                 Collection = collection
@@ -346,7 +217,7 @@ namespace Chaincode.NET.Handler
             string txId
         )
         {
-            var payload = new PutState()
+            var payload = new PutState
             {
                 Key = key,
                 Value = value,
@@ -360,7 +231,7 @@ namespace Chaincode.NET.Handler
 
         public Task<ByteString> HandleDeleteState(string collection, string key, string channelId, string txId)
         {
-            var payload = new DelState()
+            var payload = new DelState
             {
                 Key = key,
                 Collection = collection
@@ -378,7 +249,7 @@ namespace Chaincode.NET.Handler
             string txId
         )
         {
-            var payload = new GetStateByRange()
+            var payload = new GetStateByRange
             {
                 StartKey = startKey,
                 EndKey = endKey,
@@ -392,7 +263,7 @@ namespace Chaincode.NET.Handler
 
         public Task<QueryResponse> HandleQueryStateNext(string id, string channelId, string txId)
         {
-            var payload = new QueryStateNext() {Id = id};
+            var payload = new QueryStateNext {Id = id};
 
             return CreateMessageAndListen<QueryResponse>(MessageMethod.QueryStateNext,
                 ChaincodeMessage.Types.Type.QueryStateNext, payload, channelId, txId);
@@ -400,7 +271,7 @@ namespace Chaincode.NET.Handler
 
         public Task<QueryResponse> HandleQueryCloseState(string id, string channelId, string txId)
         {
-            var payload = new QueryStateClose() {Id = id};
+            var payload = new QueryStateClose {Id = id};
 
             return CreateMessageAndListen<QueryResponse>(MessageMethod.QueryStateClose,
                 ChaincodeMessage.Types.Type.QueryStateClose, payload, channelId, txId);
@@ -413,7 +284,7 @@ namespace Chaincode.NET.Handler
             string txId
         )
         {
-            var payload = new GetQueryResult()
+            var payload = new GetQueryResult
             {
                 Query = query,
                 Collection = collection
@@ -425,7 +296,7 @@ namespace Chaincode.NET.Handler
 
         public Task<HistoryQueryIterator> HandleGetHistoryForKey(string key, string channelId, string txId)
         {
-            var payload = new GetHistoryForKey() {Key = key};
+            var payload = new GetHistoryForKey {Key = key};
 
             return CreateMessageAndListen<HistoryQueryIterator>(MessageMethod.GetHistoryForKey,
                 ChaincodeMessage.Types.Type.GetHistoryForKey, payload, channelId, txId);
@@ -438,13 +309,13 @@ namespace Chaincode.NET.Handler
             string txId
         )
         {
-            var chaincodeId = new ChaincodeID() {Name = chaincodeName};
+            var chaincodeId = new ChaincodeID {Name = chaincodeName};
             var inputArgs = new RepeatedField<ByteString>().Concat(args);
 
             var chaincodeInput = new ChaincodeInput();
             chaincodeInput.Args.AddRange(inputArgs);
 
-            var payload = new ChaincodeSpec()
+            var payload = new ChaincodeSpec
             {
                 ChaincodeId = chaincodeId,
                 Input = chaincodeInput
@@ -454,16 +325,137 @@ namespace Chaincode.NET.Handler
                 ChaincodeMessage.Types.Type.InvokeChaincode, payload, channelId, txId);
 
             if (response.Type == ChaincodeMessage.Types.Type.Completed)
-            {
                 return Response.Parser.ParseFrom(response.Payload);
-            }
 
             if (response.Type == ChaincodeMessage.Types.Type.Error)
-            {
                 throw new Exception(response.Payload.ToStringUtf8());
-            }
 
             throw new Exception("Something went somewhere horribly wrong");
+        }
+
+        private Task HandleTransaction(ChaincodeMessage message)
+        {
+            return HandleMessage(message, HandleMessageAction.Invoke);
+        }
+
+        private Task HandleInit(ChaincodeMessage message)
+        {
+            return HandleMessage(message, HandleMessageAction.Init);
+        }
+
+        private async Task HandleMessage(ChaincodeMessage message, HandleMessageAction action)
+        {
+            ChaincodeMessage nextMessage = null;
+            ChaincodeInput input = null;
+
+            try
+            {
+                input = ChaincodeInput.Parser.ParseFrom(message.Payload);
+            }
+            catch
+            {
+                _logger.LogError(
+                    $"{message.ChannelId}-{message.Txid} Incorrect payload format. Sending ERROR message back to peer");
+                nextMessage = new ChaincodeMessage
+                {
+                    Txid = message.Txid,
+                    ChannelId = message.ChannelId,
+                    Type = ChaincodeMessage.Types.Type.Error,
+                    Payload = message.Payload
+                };
+            }
+
+            if (input == null)
+            {
+                await WriteStream.WriteAsync(nextMessage);
+                return;
+            }
+
+            IChaincodeStub stub = null;
+            try
+            {
+                stub = _chaincodeStubFactory.Create(this, message.ChannelId, message.Txid, input,
+                    message.Proposal);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to construct a chaincode stub instance for the INIT message: {ex}");
+                nextMessage = new ChaincodeMessage
+                {
+                    Type = ChaincodeMessage.Types.Type.Error,
+                    Payload = ex.ToString().ToByteString(),
+                    Txid = message.Txid,
+                    ChannelId = message.ChannelId
+                };
+            }
+
+            if (stub == null)
+            {
+                await WriteStream.WriteAsync(nextMessage);
+                return;
+            }
+
+            Response response;
+            if (action == HandleMessageAction.Init)
+                response = await _chaincode.Init(stub);
+            else
+                response = await _chaincode.Invoke(stub);
+
+            if (response.Status == 0)
+            {
+                var errorMessage = $"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
+                                   "has not called success or error";
+                _logger.LogError(errorMessage);
+                response = Shim.Error(errorMessage);
+            }
+
+            _logger.LogInformation($"[{message.ChaincodeEvent}]-{message.Txid} Calling chaincode {action}, " +
+                                   $"response status {response.Status}");
+
+            if (response.Status >= (int) ResponseCodes.Error)
+            {
+                _logger.LogError($"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
+                                 $"returned error response {response.Message}. " +
+                                 "Sending ERROR message back to peer");
+
+                nextMessage = new ChaincodeMessage
+                {
+                    Type = ChaincodeMessage.Types.Type.Error,
+                    Payload = response.Message.ToByteString(),
+                    Txid = message.Txid,
+                    ChannelId = message.ChannelId
+                };
+            }
+            else
+            {
+                _logger.LogInformation($"[{message.ChannelId}-{message.Txid}] Calling chaincode {action} " +
+                                       "succeeded. Sending COMPLETED message back to peer");
+                nextMessage = new ChaincodeMessage
+                {
+                    Type = ChaincodeMessage.Types.Type.Completed,
+                    Payload = response.ToByteString(),
+                    Txid = message.Txid,
+                    ChannelId = message.ChannelId,
+                    ChaincodeEvent = stub.ChaincodeEvent
+                };
+            }
+
+            await WriteStream.WriteAsync(nextMessage);
+        }
+
+        private ChaincodeMessage NewErrorMessage(ChaincodeMessage message, States state)
+        {
+            var errorString = $"[{message.ChannelId}-{message.Txid}] Chaincode Handler FSM cannot " +
+                              $"handle message ({message.Type}, with payload size {message.Payload.Length} " +
+                              $"while in state {state}";
+
+            return new ChaincodeMessage
+            {
+                Type = ChaincodeMessage.Types.Type.Error,
+                Payload = errorString.ToByteString(),
+                Txid = message.Txid,
+                ChannelId = message.ChannelId
+            };
         }
 
         private ChaincodeMessage CreateMessage(
@@ -471,13 +463,16 @@ namespace Chaincode.NET.Handler
             IMessage payload,
             string channelId,
             string txId
-        ) => new ChaincodeMessage()
+        )
         {
-            Type = type,
-            Payload = payload.ToByteString(),
-            Txid = txId,
-            ChannelId = channelId
-        };
+            return new ChaincodeMessage
+            {
+                Type = type,
+                Payload = payload.ToByteString(),
+                Txid = txId,
+                ChannelId = channelId
+            };
+        }
 
         private Task<T> CreateMessageAndListen<T>(
             MessageMethod method,

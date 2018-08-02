@@ -11,8 +11,4 @@
       <PackageReference Include="Grpc.Tools" Version="1.11.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions" />
-    </ItemGroup>
-
 </Project>

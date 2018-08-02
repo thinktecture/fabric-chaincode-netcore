@@ -31,13 +31,16 @@ namespace Chaincode.NET.Sample
         public string Owner { get; set; }
         public string DocType { get; set; } = "car";
 
-        public override string ToString() => $"{Make} {Model} in {Color} with owner {Owner}";
+        public override string ToString()
+        {
+            return $"{Make} {Model} in {Color} with owner {Owner}";
+        }
     }
 
     public class FabCar : IChaincode
     {
-        private readonly ILogger<FabCar> _logger;
         private readonly ChaincodeInvocationMap _invocationMap;
+        private readonly ILogger<FabCar> _logger;
 
         public FabCar(ILogger<FabCar> logger)
         {
@@ -48,7 +51,7 @@ namespace Chaincode.NET.Sample
                 {nameof(InitLedger), InitLedger},
                 {nameof(CreateCar), CreateCar},
                 {nameof(QueryAllCars), QueryAllCars},
-                {nameof(ChangeCarOwner), ChangeCarOwner},
+                {nameof(ChangeCarOwner), ChangeCarOwner}
             };
         }
 
@@ -72,10 +75,7 @@ namespace Chaincode.NET.Sample
 
             var carBytes = await stub.GetState(carNumber);
 
-            if (carBytes == null || carBytes.Length <= 0)
-            {
-                throw new Exception($"Car {carNumber} does not exist.");
-            }
+            if (carBytes == null || carBytes.Length <= 0) throw new Exception($"Car {carNumber} does not exist.");
 
             _logger.LogInformation(carBytes.ToStringUtf8());
 
@@ -84,7 +84,7 @@ namespace Chaincode.NET.Sample
 
         private async Task<ByteString> InitLedger(IChaincodeStub stub, Parameters args)
         {
-            var cars = new List<Car>()
+            var cars = new List<Car>
             {
                 new Car("Toyota", "Prius", "blue", "Tomoko"),
                 new Car("Ford", "Mustang", "red", "Brad"),
@@ -102,13 +102,9 @@ namespace Chaincode.NET.Sample
             {
                 var car = cars[index];
                 if (await stub.PutStateJson($"CAR{index}", car))
-                {
                     _logger.LogInformation("Added car", car.ToString());
-                }
                 else
-                {
                     _logger.LogError($"Error writing car {car} onto the ledger");
-                }
             }
 
             return ByteString.Empty;
@@ -140,7 +136,7 @@ namespace Chaincode.NET.Sample
 
                 if (iterationResult.Value != null && iterationResult.Value.Value.Length > 0)
                 {
-                    var queryResult = new CarQueryResult()
+                    var queryResult = new CarQueryResult
                     {
                         Key = iterationResult.Value.Key
                     };
