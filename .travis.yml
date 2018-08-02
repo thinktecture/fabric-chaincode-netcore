@@ -1,13 +1,10 @@
 language: csharp
 mono: none
 dotnet: 2.1.302
-go: master
 # Travis only supports Ubuntu 14 which has a very old openversion from 2014. 
 # Updating the package was not possible due to a dependency error at postgres-client.
 os: osx
 script:
-  # Ignore the error on go get, since the protos don't include a Go file
-  - go get -d github.com/hyperledger/fabric/protos || true
   - dotnet build src/Chaincode/Chaincode/Chaincode.csproj --configuration Release
   - dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release
 deploy:
