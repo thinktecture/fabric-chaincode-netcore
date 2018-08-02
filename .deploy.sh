@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ $1 = "prerelease" ]; then
-	dotnet pack src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release --output ../../../package --version-suffix "prerelease"
+	dotnet pack src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release --output ../../../package --include-symbols --version-suffix "prerelease.$TRAVIS_BUILD_NUMBER"
 else
-	dotnet pack src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release --output ../../../package
+	dotnet pack src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release --output ../../../package --include-symbols
 fi
 
-dotnet nuget push package/*.nupkg --api-key $NUGET_API_KEY
+dotnet nuget push package/*.nupkg --source https://www.nuget.org/ --api-key $NUGET_API_KEY
