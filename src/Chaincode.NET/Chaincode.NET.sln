@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.NET", "Chaincode.NET\Chaincode.NET.csproj", "{32B78E58-CD8E-4F81-B89D-CE7F0DF04796}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.NET.Sample", "Chaincode.NET.Sample\Chaincode.NET.Sample.csproj", "{6ECC1AAA-CD6B-43C4-9FCF-047FEEAAFFAB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.NET.Protos", "Chaincode.NET.Protos\Chaincode.NET.Protos.csproj", "{A9B96694-80F5-4D76-9BA7-17A6A22C6255}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.NET.Test", "Chaincode.NET.Test\Chaincode.NET.Test.csproj", "{40046F67-B568-4AA4-A58E-65BF4423AE20}"
@@ -18,10 +16,6 @@ Global
 		{32B78E58-CD8E-4F81-B89D-CE7F0DF04796}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32B78E58-CD8E-4F81-B89D-CE7F0DF04796}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32B78E58-CD8E-4F81-B89D-CE7F0DF04796}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6ECC1AAA-CD6B-43C4-9FCF-047FEEAAFFAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6ECC1AAA-CD6B-43C4-9FCF-047FEEAAFFAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6ECC1AAA-CD6B-43C4-9FCF-047FEEAAFFAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6ECC1AAA-CD6B-43C4-9FCF-047FEEAAFFAB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A9B96694-80F5-4D76-9BA7-17A6A22C6255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A9B96694-80F5-4D76-9BA7-17A6A22C6255}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9B96694-80F5-4D76-9BA7-17A6A22C6255}.Release|Any CPU.ActiveCfg = Release|Any CPU
