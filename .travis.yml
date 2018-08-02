@@ -10,4 +10,12 @@ script:
   - go get -d github.com/hyperledger/fabric/protos || true
   - dotnet build src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release
   - dotnet test src/Chaincode.NET/Chaincode.NET.Test/Chaincode.NET.Test.csproj --configuration Release
-  - dotnet pack src/Chaincode.NET/Chaincode.NET/Chaincode.NET.csproj --configuration Release --output ../../../package
+deploy:
+  - provider: script
+    script: bash .deploy.sh
+    on:
+      branch: master
+  - provider: script
+    script: bash .deploy.sh prerelease
+    on:
+      branch: develop
