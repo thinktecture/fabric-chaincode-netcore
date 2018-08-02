@@ -1,5 +1,6 @@
 .idea
 src/protos
+/package
 
 
 # Created by https://www.gitignore.io/api/aspnetcore
