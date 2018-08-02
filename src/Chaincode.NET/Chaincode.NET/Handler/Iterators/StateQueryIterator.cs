@@ -1,7 +1,6 @@
-using Protos;
-using Queryresult;
+using Chaincode.NET.Protos;
 
-namespace Chaincode.NET.Handler.Iterators
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators
 {
     public class StateQueryIterator : CommonIterator<KV>
     {

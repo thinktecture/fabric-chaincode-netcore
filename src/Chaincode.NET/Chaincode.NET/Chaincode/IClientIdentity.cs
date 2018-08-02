@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public interface IClientIdentity
     {

@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Handler.Iterators;
-using Common;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-using Msp;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
 using Xunit;
 
-namespace Chaincode.NET.Test.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Chaincode
 {
     public class ChaincodeStubTest
     {

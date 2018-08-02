@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
 using Newtonsoft.Json;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
 
-namespace Chaincode.NET.Extensions
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions
 {
     public static class ChaincodeStubExtensions
     {

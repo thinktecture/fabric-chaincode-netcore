@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Protos;
+using Chaincode.NET.Protos;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public interface IChaincode
     {

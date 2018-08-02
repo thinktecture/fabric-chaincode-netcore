@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Messaging;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 using Xunit;
 
-namespace Chaincode.NET.Test.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Messaging
 {
     public class MessageQueueTest
     {
@@ -21,7 +21,7 @@ namespace Chaincode.NET.Test.Messaging
 
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
 
-            handlerMock.Setup(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
+            handlerMock.Setup<object>(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
                 .Returns("foobar");
 
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);
@@ -97,7 +97,7 @@ namespace Chaincode.NET.Test.Messaging
 
             handlerMock.SetupGet(m => m.WriteStream).Returns(streamMock.Object);
 
-            handlerMock.Setup(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
+            handlerMock.Setup<object>(m => m.ParseResponse(It.IsAny<ChaincodeMessage>(), It.IsAny<MessageMethod>()))
                 .Throws<Exception>();
 
             var sut = new MessageQueue(handlerMock.Object, new Mock<ILogger<MessageQueue>>().Object);

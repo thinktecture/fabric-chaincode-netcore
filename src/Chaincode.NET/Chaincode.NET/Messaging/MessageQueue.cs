@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using Chaincode.NET.Handler;
+using Chaincode.NET.Protos;
 using Microsoft.Extensions.Logging;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
 
-namespace Chaincode.NET.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging
 {
     public class MessageQueue : IMessageQueue
     {

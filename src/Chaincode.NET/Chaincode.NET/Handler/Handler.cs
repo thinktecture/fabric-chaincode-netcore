@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler.Iterators;
-using Chaincode.NET.Messaging;
+using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public class Handler : IHandler
     {

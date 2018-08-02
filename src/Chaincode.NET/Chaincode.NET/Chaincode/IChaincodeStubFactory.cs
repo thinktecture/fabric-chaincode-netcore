@@ -1,7 +1,7 @@
-using Chaincode.NET.Handler;
-using Protos;
+using Chaincode.NET.Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public interface IChaincodeStubFactory
     {

@@ -1,10 +1,10 @@
 using System;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public class HandlerFactory : IHandlerFactory
     {

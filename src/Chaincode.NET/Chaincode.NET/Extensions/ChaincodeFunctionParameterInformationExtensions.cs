@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
-using Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
 
-namespace Chaincode.NET.Extensions
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions
 {
     public static class ChaincodeFunctionParameterInformationExtensions
     {

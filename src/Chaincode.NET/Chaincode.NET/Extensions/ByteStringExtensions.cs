@@ -1,7 +1,7 @@
 using System.Globalization;
 using Google.Protobuf;
 
-namespace Chaincode.NET.Extensions
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions
 {
     public static class ByteStringExtensions
     {

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Chaincode.NET.Handler.Iterators;
-using Chaincode.NET.Messaging;
+using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Grpc.Core;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public interface IHandler
     {

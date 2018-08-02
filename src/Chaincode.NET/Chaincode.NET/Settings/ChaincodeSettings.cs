@@ -1,4 +1,4 @@
-namespace Chaincode.NET.Settings
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Settings
 {
     public class ChaincodeSettings
     {

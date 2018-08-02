@@ -1,4 +1,4 @@
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public enum ResponseCodes
     {

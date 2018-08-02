@@ -1,4 +1,4 @@
-namespace Chaincode.NET.Handler.Iterators
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators
 {
     public enum IteratorType
     {

@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Chaincode.NET.Handler.Iterators;
+using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
-using Msp;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public interface IChaincodeStub
     {

@@ -5,9 +5,9 @@
 
         <IsPackable>false</IsPackable>
 
-        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.NET</AssemblyName>
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.NET.Sample</AssemblyName>
 
-        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.NET</RootNamespace>
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.NET.Sample</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

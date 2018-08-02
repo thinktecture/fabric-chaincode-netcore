@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Handler.Iterators;
-using Common;
+using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Msp;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public class ChaincodeStubFactory : IChaincodeStubFactory
     {

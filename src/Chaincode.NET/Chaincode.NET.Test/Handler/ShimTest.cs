@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Settings;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Google.Protobuf;
 using Grpc.Core;
@@ -11,10 +8,13 @@ using Grpc.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Settings;
 using Xunit;
 
-namespace Chaincode.NET.Test.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Handler
 {
     public class ShimTest
     {

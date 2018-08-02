@@ -1,4 +1,4 @@
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public interface IHandlerFactory
     {

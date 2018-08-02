@@ -1,4 +1,4 @@
-namespace Chaincode.NET.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging
 {
     public enum MessageMethod
     {

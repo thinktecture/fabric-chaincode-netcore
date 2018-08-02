@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Protos;
+using Chaincode.NET.Protos;
 
-namespace Chaincode.NET.Handler.Iterators
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators
 {
     public abstract class CommonIterator<T>
     {

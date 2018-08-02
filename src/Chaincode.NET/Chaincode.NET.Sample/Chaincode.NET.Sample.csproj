@@ -4,8 +4,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <LangVersion>7.3</LangVersion>
-        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.NET</AssemblyName>
-        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.NET</RootNamespace>
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.NET.Sample</AssemblyName>
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.NET.Sample</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

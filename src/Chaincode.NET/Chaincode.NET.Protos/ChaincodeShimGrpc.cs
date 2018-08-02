@@ -13,7 +13,7 @@
 
 using grpc = global::Grpc.Core;
 
-namespace Protos {
+namespace Chaincode.NET.Protos {
   /// <summary>
   /// Interface that provides support to chaincode execution. ChaincodeContext
   /// provides the context necessary for the server to respond appropriately.
@@ -22,9 +22,9 @@ namespace Protos {
   {
     static readonly string __ServiceName = "protos.ChaincodeSupport";
 
-    static readonly grpc::Marshaller<global::Protos.ChaincodeMessage> __Marshaller_ChaincodeMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Protos.ChaincodeMessage.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Chaincode.NET.Protos.ChaincodeMessage> __Marshaller_ChaincodeMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Chaincode.NET.Protos.ChaincodeMessage.Parser.ParseFrom);
 
-    static readonly grpc::Method<global::Protos.ChaincodeMessage, global::Protos.ChaincodeMessage> __Method_Register = new grpc::Method<global::Protos.ChaincodeMessage, global::Protos.ChaincodeMessage>(
+    static readonly grpc::Method<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage> __Method_Register = new grpc::Method<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage>(
         grpc::MethodType.DuplexStreaming,
         __ServiceName,
         "Register",
@@ -34,13 +34,13 @@ namespace Protos {
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::Protos.ChaincodeShimReflection.Descriptor.Services[0]; }
+      get { return global::Chaincode.NET.Protos.ChaincodeShimReflection.Descriptor.Services[0]; }
     }
 
     /// <summary>Base class for server-side implementations of ChaincodeSupport</summary>
     public abstract partial class ChaincodeSupportBase
     {
-      public virtual global::System.Threading.Tasks.Task Register(grpc::IAsyncStreamReader<global::Protos.ChaincodeMessage> requestStream, grpc::IServerStreamWriter<global::Protos.ChaincodeMessage> responseStream, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task Register(grpc::IAsyncStreamReader<global::Chaincode.NET.Protos.ChaincodeMessage> requestStream, grpc::IServerStreamWriter<global::Chaincode.NET.Protos.ChaincodeMessage> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -70,11 +70,11 @@ namespace Protos {
       {
       }
 
-      public virtual grpc::AsyncDuplexStreamingCall<global::Protos.ChaincodeMessage, global::Protos.ChaincodeMessage> Register(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncDuplexStreamingCall<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage> Register(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Register(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual grpc::AsyncDuplexStreamingCall<global::Protos.ChaincodeMessage, global::Protos.ChaincodeMessage> Register(grpc::CallOptions options)
+      public virtual grpc::AsyncDuplexStreamingCall<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage> Register(grpc::CallOptions options)
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_Register, null, options);
       }

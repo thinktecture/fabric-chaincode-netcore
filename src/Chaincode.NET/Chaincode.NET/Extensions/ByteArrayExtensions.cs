@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Chaincode.NET.Extensions
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions
 {
     public static class ByteArrayExtensions
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Protos;
+using Chaincode.NET.Protos;
 
-namespace Chaincode.NET.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging
 {
     public class QueueMessage
     {

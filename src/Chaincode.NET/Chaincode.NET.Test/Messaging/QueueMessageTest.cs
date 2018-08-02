@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Chaincode.NET.Messaging;
+using Chaincode.NET.Protos;
 using FluentAssertions;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 using Xunit;
 
-namespace Chaincode.NET.Test.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Messaging
 {
     public class QueueMessageTest
     {

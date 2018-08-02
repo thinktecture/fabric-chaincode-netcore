@@ -1,12 +1,12 @@
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Messaging;
-using Chaincode.NET.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Settings;
 
-namespace Chaincode.NET
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET
 {
     public static class ProviderConfiguration
     {

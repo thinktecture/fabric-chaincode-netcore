@@ -1,7 +1,7 @@
+using Chaincode.NET.Protos;
 using Grpc.Core;
-using Protos;
 
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public interface IChaincodeSupportClientFactory
     {

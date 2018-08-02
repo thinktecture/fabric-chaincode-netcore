@@ -1,12 +1,12 @@
 using System;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Extensions;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Moq;
-using Msp;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
 using Xunit;
 
-namespace Chaincode.NET.Test.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Chaincode
 {
     public class ClientIdentityTest
     {

@@ -1,9 +1,9 @@
 using System;
-using Chaincode.NET.Handler;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
 
-namespace Chaincode.NET.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging
 {
     public class MessageQueueFactory : IMessageQueueFactory
     {

@@ -1,20 +1,21 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Handler.Iterators;
-using Chaincode.NET.Messaging;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Google.Protobuf;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging;
 using Xunit;
+using Metadata = Grpc.Core.Metadata;
 
-namespace Chaincode.NET.Test.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Handler
 {
     public class HandlerTest
     {
@@ -54,12 +55,12 @@ namespace Chaincode.NET.Test.Handler
             IChaincode chaincode = null
         )
         {
-            return new NET.Handler.Handler(
+            return new global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler(
                 chaincode ?? new Mock<IChaincode>().Object,
                 "example.test",
                 9999,
                 chaincodeStubFactory ?? new Mock<IChaincodeStubFactory>().Object,
-                new Mock<ILogger<NET.Handler.Handler>>().Object,
+                new Mock<ILogger<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>>().Object,
                 messageQueueFactory,
                 chaincodeSupportClientFactory
             );
@@ -148,7 +149,7 @@ namespace Chaincode.NET.Test.Handler
             messageQueueMock.Setup(m => m.HandleMessageResponse(responseMessage));
 
             var messageQueueFactoryMock = new Mock<IMessageQueueFactory>();
-            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>()))
+            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>()))
                 .Returns(messageQueueMock.Object);
 
             var (responseStreamMock, chaincodeSupportClientMock, chaincodeSupportClientFactoryMock, handler) =
@@ -178,7 +179,7 @@ namespace Chaincode.NET.Test.Handler
             messageQueueMock.Setup(m => m.HandleMessageResponse(responseMessage));
 
             var messageQueueFactoryMock = new Mock<IMessageQueueFactory>();
-            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>()))
+            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>()))
                 .Returns(messageQueueMock.Object);
 
             var (responseStreamMock, chaincodeSupportClientMock, chaincodeSupportClientFactoryMock, handler) =
@@ -209,7 +210,7 @@ namespace Chaincode.NET.Test.Handler
             var chaincodeStub = new Mock<IChaincodeStub>().Object;
 
             var chaincodeStubFactoryMock = new Mock<IChaincodeStubFactory>();
-            chaincodeStubFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>(), "ChannelId", "TxId",
+            chaincodeStubFactoryMock.Setup<IChaincodeStub>(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>(), "ChannelId", "TxId",
                     It.IsAny<ChaincodeInput>(), It.IsAny<SignedProposal>()))
                 .Returns(chaincodeStub);
 
@@ -259,7 +260,7 @@ namespace Chaincode.NET.Test.Handler
             var chaincodeStub = new Mock<IChaincodeStub>().Object;
 
             var chaincodeStubFactoryMock = new Mock<IChaincodeStubFactory>();
-            chaincodeStubFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>(), "ChannelId", "TxId",
+            chaincodeStubFactoryMock.Setup<IChaincodeStub>(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>(), "ChannelId", "TxId",
                     It.IsAny<ChaincodeInput>(), It.IsAny<SignedProposal>()))
                 .Returns(chaincodeStub);
 
@@ -336,7 +337,7 @@ namespace Chaincode.NET.Test.Handler
             var chaincodeStub = new Mock<IChaincodeStub>().Object;
 
             var chaincodeStubFactoryMock = new Mock<IChaincodeStubFactory>();
-            chaincodeStubFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>(), "ChannelId", "TxId",
+            chaincodeStubFactoryMock.Setup<IChaincodeStub>(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>(), "ChannelId", "TxId",
                     It.IsAny<ChaincodeInput>(), It.IsAny<SignedProposal>()))
                 .Returns(chaincodeStub);
 
@@ -420,7 +421,7 @@ namespace Chaincode.NET.Test.Handler
             };
 
             var chaincodeStubFactoryMock = new Mock<IChaincodeStubFactory>();
-            chaincodeStubFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>(), "ChannelId", "TxId",
+            chaincodeStubFactoryMock.Setup<IChaincodeStub>(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>(), "ChannelId", "TxId",
                     It.IsAny<ChaincodeInput>(), It.IsAny<SignedProposal>()))
                 .Throws(new Exception("unittest"));
 
@@ -656,7 +657,7 @@ namespace Chaincode.NET.Test.Handler
                 .Callback<QueueMessage>(message => queuedMessage = message as QueueMessage<ChaincodeMessage>);
 
             var messageQueueFactoryMock = new Mock<IMessageQueueFactory>();
-            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>()))
+            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>()))
                 .Returns(messageQueueMock.Object);
 
             var handler = CreateHandlerWithChainsupportClientFactory(messageQueueFactoryMock.Object);
@@ -687,7 +688,7 @@ namespace Chaincode.NET.Test.Handler
                 .Callback<QueueMessage>(message => queuedMessage = message as QueueMessage<ChaincodeMessage>);
 
             var messageQueueFactoryMock = new Mock<IMessageQueueFactory>();
-            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>()))
+            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>()))
                 .Returns(messageQueueMock.Object);
 
             var handler = CreateHandlerWithChainsupportClientFactory(messageQueueFactoryMock.Object);
@@ -716,7 +717,7 @@ namespace Chaincode.NET.Test.Handler
                 .Callback<QueueMessage>(message => queuedMessage = message as QueueMessage<ChaincodeMessage>);
 
             var messageQueueFactoryMock = new Mock<IMessageQueueFactory>();
-            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<NET.Handler.Handler>()))
+            messageQueueFactoryMock.Setup(m => m.Create(It.IsAny<global::Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Handler>()))
                 .Returns(messageQueueMock.Object);
 
             var handler = CreateHandlerWithChainsupportClientFactory(messageQueueFactoryMock.Object);

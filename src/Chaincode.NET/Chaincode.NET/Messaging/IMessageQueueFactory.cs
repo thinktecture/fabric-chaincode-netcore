@@ -1,6 +1,6 @@
-using Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
 
-namespace Chaincode.NET.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Messaging
 {
     public interface IMessageQueueFactory
     {

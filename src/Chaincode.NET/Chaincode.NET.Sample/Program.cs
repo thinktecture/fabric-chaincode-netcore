@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Chaincode.NET.Handler;
 using Microsoft.Extensions.DependencyInjection;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
 
-namespace Chaincode.NET.Sample
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample
 {
     internal class Program
     {

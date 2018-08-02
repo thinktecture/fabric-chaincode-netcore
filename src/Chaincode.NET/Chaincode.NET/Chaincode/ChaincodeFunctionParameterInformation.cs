@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Chaincode.NET.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode
 {
     public class Parameters : List<string>
     {

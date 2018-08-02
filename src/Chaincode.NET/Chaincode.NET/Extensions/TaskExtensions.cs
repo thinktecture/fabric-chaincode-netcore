@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Chaincode.NET.Extensions
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions
 {
     public static class TaskExtensions
     {

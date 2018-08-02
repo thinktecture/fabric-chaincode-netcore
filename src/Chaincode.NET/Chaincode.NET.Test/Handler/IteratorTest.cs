@@ -1,15 +1,14 @@
 using System;
-using Chaincode.NET.Extensions;
-using Chaincode.NET.Handler;
-using Chaincode.NET.Handler.Iterators;
+using Chaincode.NET.Protos;
 using FluentAssertions;
 using Google.Protobuf;
 using Moq;
-using Protos;
-using Queryresult;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler.Iterators;
 using Xunit;
 
-namespace Chaincode.NET.Test.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Handler
 {
     // All tests are done with StateQueryIterator, since they apply to the HistoryQueryIterator as well
     public class IteratorTest

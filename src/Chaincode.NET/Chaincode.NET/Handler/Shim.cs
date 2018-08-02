@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using Chaincode.NET.Chaincode;
-using Chaincode.NET.Settings;
+using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Grpc.Core;
 using Grpc.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Settings;
 
-namespace Chaincode.NET.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Handler
 {
     public class Shim
     {

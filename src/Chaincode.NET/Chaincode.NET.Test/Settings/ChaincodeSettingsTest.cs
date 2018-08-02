@@ -1,8 +1,8 @@
-using Chaincode.NET.Settings;
 using FluentAssertions;
+using Thinktecture.HyperledgerFabric.Chaincode.NET.Settings;
 using Xunit;
 
-namespace Chaincode.NET.Test.Settings
+namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample.Settings
 {
     public class ChaincodeSettingsTest
     {
