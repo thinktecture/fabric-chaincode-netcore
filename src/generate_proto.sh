@@ -27,8 +27,8 @@ cp $PROTO_PATH/peer/proposal_response.proto $TARGET_PATH/peer/
 $TOOLS_PATH/protoc \
 	-I=./protos \
 	-I=$GOPATH/src/github.com/gogo/protobuf/protobuf \
-	--csharp_out ./Chaincode.NET/Chaincode.NET.Protos \
-	--grpc_out ./Chaincode.NET/Chaincode.NET.Protos \
+	--csharp_out ./Chaincode/Chaincode.Protos \
+	--grpc_out ./Chaincode/Chaincode.Protos \
 	./protos/common/common.proto \
 	./protos/msp/identities.proto \
 	./protos/ledger/queryresult/kv_query_result.proto \

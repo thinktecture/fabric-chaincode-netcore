@@ -11,7 +11,7 @@ With this package you are able to build chaincode (aka "Smart Contracts") for [H
 
 ## Development
 
-The following instructions are meant for developers of the Chaincode.NET package.
+The following instructions are meant for developers of the Chaincode package.
 
 ### Folder structure
 
@@ -34,11 +34,11 @@ The `src` folder contains the code for the NuGet package.
 
 In order to build the source folder, please follow the steps:
 
-1. Open a terminal within the `Chaincode.NET` folder and run `dotnet restore` to restore all the packages
+1. Open a terminal within the `Chaincode` folder and run `dotnet restore` to restore all the packages
 2. Make sure, you have Golang and the proto files for Hyperledger Fabric installed: `go get github.com/hyperledger/fabric/protos` 
 3. Run `generate_protos.sh` within the `src` folder. It will generate the C# classes for Hyperledger Fabric's Protofiles.
 4. Open the Project with JetBrains Rider (preferred) or Visual Studio
-5. Build Chaincode.NET
+5. Build Chaincode
 
 ### Testing
 

@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>7.3</LangVersion>
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode</AssemblyName>
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode</RootNamespace>
+        <PackageId>Thinktecture.HyperledgerFabric.Chaincode</PackageId>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <Authors>Manuel Rauber</Authors>
+        <Company>Thinktecture AG</Company>
+        <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+        <Title>Chaincode .NET Shim for Hyperledger Fabric</Title>
+        <Description>Chaincode .NET is a chaincode shim for Hyperledger Fabric.</Description>
+        <PackageProjectUrl>https://github.com/thinktecture/fabric-chaincode-netcore</PackageProjectUrl>
+        <PackageIconUrl>http://thinktecture.com/images/Logo_T_Nontransparent.png</PackageIconUrl>
+        <RepositoryUrl>git@github.com:thinktecture/fabric-chaincode-netcore.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.6.0" />
+      <PackageReference Include="Grpc.Core" Version="1.11.1" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Chaincode.Protos\Chaincode.Protos.csproj" PrivateAssets="all" />
+    </ItemGroup>
+
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+        <ItemGroup>
+            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+        </ItemGroup>
+    </Target>
+</Project>
