@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.NET.Samples.AssetHolding", "Chaincode.NET.Samples.AssetHolding\Chaincode.NET.Samples.AssetHolding.csproj", "{DADAD7CE-D201-433C-885B-06C6EEC0B542}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetHolding", "AssetHolding\AssetHolding.csproj", "{DADAD7CE-D201-433C-885B-06C6EEC0B542}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabCar", "FabCar\FabCar.csproj", "{9DFE1B75-0E5A-4FF1-B8AC-5B32CA61E8F4}"
 EndProject

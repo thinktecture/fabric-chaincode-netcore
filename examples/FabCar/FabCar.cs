@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
+using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample
+namespace FabCar
 {
     public class Car
     {

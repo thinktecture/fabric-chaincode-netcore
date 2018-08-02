@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using Chaincode.NET.Protos;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Chaincode;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Extensions;
-using Thinktecture.HyperledgerFabric.Chaincode.NET.Handler;
+using Protos;
+using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.Handler;
+using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.NET.Sample
+namespace AssetHolding
 {
     public class AssetHolding : IChaincode
     {
