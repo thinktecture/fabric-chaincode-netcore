@@ -1,13 +1,68 @@
 [![Build Status](https://travis-ci.org/thinktecture/fabric-chaincode-netcore.svg?branch=master)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 [![Build Status](https://travis-ci.org/thinktecture/fabric-chaincode-netcore.svg?branch=develop)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 
-
-
 # Thinktecture Hyperledger Fabric Chaincode .NET Adapter
 
 With this package you are able to build chaincode (aka "Smart Contracts") for [Hyperledger Fabric](https://hyperledger.org/projects/fabric) using .NET Core. 
 
+> Please have in mind, that this code and it's NuGet package is heavily work in progress.
+
 ## Usage
+
+1. Install the [NuGet Package](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode): `Thinktecture.HyperledgerFabric.Chaincode` 
+2. Create a new console application 
+3. Create a new class implementing `IChaincode`
+4. Take a look at the following section for the implementation of `static Main()`.
+
+For more samples, please take a look at [examples](examples).
+
+### Startup (C# Language Level >= 7.3)
+
+```
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Thinktecture.HyperledgerFabric.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.Handler;
+
+namespace AssetHolding
+{
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            using (var provider = ProviderConfiguration.Configure<YourChaincodeImplementation>(args))
+            {
+                var shim = provider.GetRequiredService<Shim>();
+                await shim.Start();
+            }
+        }
+    }
+}
+```
+
+### Startup (C# Language Level <= 7.3)
+
+```
+using Microsoft.Extensions.DependencyInjection;
+using Thinktecture.HyperledgerFabric.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.Handler;
+
+namespace AssetHolding
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            using (var provider = ProviderConfiguration.Configure<YourChaincodeImplementation>(args))
+            {
+                var shim = provider.GetRequiredService<Shim>();
+                shim.Start().Wait();
+            }
+        }
+    }
+}  
+```
+ 
 
 ## Development
 
