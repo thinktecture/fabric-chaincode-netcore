@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Grpc.Core;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Protos;
 using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 using Thinktecture.HyperledgerFabric.Chaincode.Settings;
+using Thinktecture.IO;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
 {
@@ -15,18 +17,19 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
     {
         private readonly ChaincodeSettings _chaincodeSettings;
         private readonly IHandlerFactory _handlerFactory;
+        private readonly IFile _file;
         private readonly ILogger<Shim> _logger;
 
         public Shim(
             IOptions<ChaincodeSettings> chaincodeSettings,
             ILogger<Shim> logger,
-            IHandlerFactory handlerFactory
+            IHandlerFactory handlerFactory,
+            IFile file
         )
         {
-            if (chaincodeSettings == null) throw new ArgumentNullException(nameof(chaincodeSettings));
-
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _handlerFactory = handlerFactory ?? throw new ArgumentNullException(nameof(handlerFactory));
+            _logger = logger;
+            _handlerFactory = handlerFactory;
+            _file = file;
             _chaincodeSettings = chaincodeSettings.Value;
 
             if (_chaincodeSettings.LogGrpc) GrpcEnvironment.SetLogger(new ConsoleLogger());
@@ -36,9 +39,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
         {
             var url = ParseUrl(_chaincodeSettings.PeerAddress);
 
-            // TODO: TLS Stuff?
-
-            var handler = _handlerFactory.Create(url.Host, url.Port);
+            var handler = _handlerFactory.Create(url.Host, url.Port, CreateChannelCredentials());
 
             var chaincodeId = new ChaincodeID {Name = _chaincodeSettings.ChaincodeIdName};
 
@@ -53,6 +54,45 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             });
 
             return handler;
+        }
+
+        private ChannelCredentials CreateChannelCredentials()
+        {
+            if (string.IsNullOrEmpty(_chaincodeSettings.PeerTlsRootCertificateFilePath) &&
+                string.IsNullOrEmpty(_chaincodeSettings.TlsClientCertFilePath) &&
+                string.IsNullOrEmpty(_chaincodeSettings.TlsClientKeyFilePath))
+            {
+                return ChannelCredentials.Insecure;
+            }
+
+            if (!_file.Exists(_chaincodeSettings.PeerTlsRootCertificateFilePath))
+            {
+                throw new FileNotFoundException(
+                    "Could not locate file for environment variable CORE_PEER_TLS_ROOTCERT_FILE",
+                    _chaincodeSettings.PeerTlsRootCertificateFilePath);
+            }
+
+            if (!_file.Exists(_chaincodeSettings.TlsClientKeyFilePath))
+            {
+                throw new FileNotFoundException(
+                    "Could not locate file for environment variable CORE_TLS_CLIENT_KEY_PATH",
+                    _chaincodeSettings.TlsClientKeyFilePath);
+            }
+
+            if (!_file.Exists(_chaincodeSettings.TlsClientCertFilePath))
+            {
+                throw new FileNotFoundException(
+                    "Could not locate file for environment variable CORE_TLS_CLIENT_CERT_PATH",
+                    _chaincodeSettings.TlsClientCertFilePath);
+            }
+
+            return new SslCredentials(
+                _file.ReadAllText(_chaincodeSettings.PeerTlsRootCertificateFilePath),
+                new KeyCertificatePair(
+                    _file.ReadAllText(_chaincodeSettings.TlsClientCertFilePath),
+                    _file.ReadAllText(_chaincodeSettings.TlsClientKeyFilePath)
+                )
+            );
         }
 
         private (string Host, int Port) ParseUrl(string peerAddress)

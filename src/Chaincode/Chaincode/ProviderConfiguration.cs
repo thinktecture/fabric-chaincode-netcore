@@ -5,6 +5,8 @@ using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 using Thinktecture.HyperledgerFabric.Chaincode.Settings;
+using Thinktecture.IO;
+using Thinktecture.IO.Adapters;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode
 {
@@ -32,6 +34,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
             serviceCollection.AddSingleton<IHandlerFactory, HandlerFactory>();
             serviceCollection.AddSingleton<IMessageQueueFactory, MessageQueueFactory>();
             serviceCollection.AddSingleton<IChaincodeSupportClientFactory, ChaincodeSupportClientFactory>();
+            serviceCollection.AddSingleton<IFile, FileAdapter>();
         }
 
         private static void ConfigureSettings(ServiceCollection serviceCollection, string[] args)

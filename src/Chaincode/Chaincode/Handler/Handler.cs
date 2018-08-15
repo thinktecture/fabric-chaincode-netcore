@@ -29,6 +29,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             IChaincode chaincode,
             string host,
             int port,
+            ChannelCredentials channelCredentials,
             IChaincodeStubFactory chaincodeStubFactory,
             ILogger<Handler> logger,
             IMessageQueueFactory messageQueueFactory,
@@ -40,7 +41,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             _logger = logger;
 
             // TODO: Secure channel?
-            _client = chaincodeSupportClientFactory.Create(new Channel(host, port, ChannelCredentials.Insecure,
+            _client = chaincodeSupportClientFactory.Create(new Channel(host, port, channelCredentials,
                 new List<ChannelOption>
                 {
                     new ChannelOption("request-timeout", 30000)

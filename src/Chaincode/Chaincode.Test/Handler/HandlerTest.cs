@@ -59,6 +59,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
                 chaincode ?? new Mock<IChaincode>().Object,
                 "example.test",
                 9999,
+                ChannelCredentials.Insecure, 
                 chaincodeStubFactory ?? new Mock<IChaincodeStubFactory>().Object,
                 new Mock<ILogger<global::Thinktecture.HyperledgerFabric.Chaincode.Handler.Handler>>().Object,
                 messageQueueFactory,

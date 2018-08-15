@@ -12,6 +12,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
 using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 using Thinktecture.HyperledgerFabric.Chaincode.Settings;
+using Thinktecture.IO;
 using Xunit;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
@@ -55,7 +56,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
                 CORE_LOG_GRPC = true
             });
 
-            var _ = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
+            var _ = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object, null);
 
             GrpcEnvironment.Logger.Should().BeOfType<ConsoleLogger>();
         }
@@ -79,10 +80,10 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
             handlerMock.Setup(m => m.Chat(message)).Returns(Task.CompletedTask);
 
             var handlerFactoryMock = new Mock<IHandlerFactory>();
-            handlerFactoryMock.Setup(m => m.Create("example.test", 9999))
+            handlerFactoryMock.Setup(m => m.Create("example.test", 9999, ChannelCredentials.Insecure))
                 .Returns(handlerMock.Object);
 
-            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, handlerFactoryMock.Object);
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, handlerFactoryMock.Object, null);
             var result = await shim.Start();
 
             result.Should().BeSameAs(handlerMock.Object);
@@ -99,7 +100,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
                 CORE_PEER_ADDRESS = "grpcs://example.test"
             });
 
-            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object, null);
 
             shim.Awaiting(m => m.Start())
                 .Should().Throw<Exception>("Peer Address should not contain any protocol information.");
@@ -113,10 +114,63 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
                 CORE_PEER_ADDRESS = "example.test"
             });
 
-            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object);
+            var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object, null);
 
             shim.Awaiting(m => m.Start())
                 .Should().Throw<Exception>("Please provide peer address in the format of host:port");
+        }
+
+        [Fact]
+        public void Start_throws_an_error_when_PeerTlsRootCertificateFilePath_points_to_a_non_existing_file()
+        {
+            var options = Options.Create(new ChaincodeSettings()
+            {
+                CORE_PEER_TLS_ROOTCERT_FILE = "foobar"
+            });
+
+            var fileMock = new Mock<IFile>();
+            fileMock.Setup(m => m.Exists(It.IsAny<string>())).Returns(false);
+            
+            var shim = new Shim(options, null, null, fileMock.Object);
+            shim.Awaiting(m => m.Start())
+                .Should().Throw<Exception>("Could not locate file for environment variable CORE_PEER_TLS_ROOTCERT_FILE");
+        }
+        
+        [Fact]
+        public void Start_throws_an_error_when_TlsClientKeyFilePath_points_to_a_non_existing_file()
+        {
+            var options = Options.Create(new ChaincodeSettings()
+            {
+                CORE_TLS_CLIENT_KEY_PATH = "foobar"
+            });
+
+            var fileMock = new Mock<IFile>();
+            fileMock.SetupSequence(m => m.Exists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(false);
+            
+            var shim = new Shim(options, null, null, fileMock.Object);
+            shim.Awaiting(m => m.Start())
+                .Should().Throw<Exception>("Could not locate file for environment variable CORE_TLS_CLIENT_KEY_PATH");
+        }
+        
+        [Fact]
+        public void Start_throws_an_error_when_TlsClientCertFilePath_points_to_a_non_existing_file()
+        {
+            var options = Options.Create(new ChaincodeSettings()
+            {
+                CORE_TLS_CLIENT_CERT_PATH = "foobar"
+            });
+
+            var fileMock = new Mock<IFile>();
+            fileMock.SetupSequence(m => m.Exists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(true)
+                .Returns(false);
+            
+            var shim = new Shim(options, null, null, fileMock.Object);
+            shim.Awaiting(m => m.Start())
+                .Should().Throw<Exception>("Could not locate file for environment variable CORE_TLS_CLIENT_CERT_PATH");
         }
     }
 }
