@@ -10,7 +10,7 @@ using Thinktecture.IO.Adapters;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode
 {
-    public static class ProviderConfiguration
+    public static class ChaincodeProviderConfiguration
     {
         public static ServiceProvider Configure<TChaincode>(string[] args)
             where TChaincode : class, IChaincode
