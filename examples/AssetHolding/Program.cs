@@ -9,7 +9,7 @@ namespace AssetHolding
     {
         static async Task Main(string[] args)
         {
-            using (var provider = ProviderConfiguration.Configure<AssetHolding>(args))
+            using (var provider = ChaincodeProviderConfiguration.Configure<AssetHolding>(args))
             {
                 var shim = provider.GetRequiredService<Shim>();
                 await shim.Start();

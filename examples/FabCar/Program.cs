@@ -10,7 +10,7 @@ namespace FabCar
     {
         static async Task Main(string[] args)
         {
-            using (var provider = ProviderConfiguration.Configure<FabCar>(args))
+            using (var provider = ChaincodeProviderConfiguration.Configure<FabCar>(args))
             {
                 var shim = provider.GetRequiredService<Shim>();
                 await shim.Start();
