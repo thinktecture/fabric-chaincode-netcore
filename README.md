@@ -1,5 +1,10 @@
-[![Build Status](https://travis-ci.org/thinktecture/fabric-chaincode-netcore.svg?branch=master)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
-[![Build Status](https://travis-ci.org/thinktecture/fabric-chaincode-netcore.svg?branch=develop)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
+
+[![Master Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore.svg?label=master)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
+[![NuGet Release](https://img.shields.io/nuget/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
+
+[![Develop Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore/develop.svg?label=develop)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20pre-release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
+
 
 # Thinktecture Hyperledger Fabric Chaincode .NET Adapter
 
