@@ -66,7 +66,12 @@ namespace AssetHolding
     }
 }  
 ```
- 
+
+## Samples
+
+* [FabCar](https://github.com/thinktecture/hlf-sample-fabar-netcore)
+* [Asset Holding](https://github.com/thinktecture/hlf-sample-asset-holding-netcore)
+* [Number Porting](https://github.com/thinktecture/hlf-sample-number-porting-netcore)
 
 ## Development
 
