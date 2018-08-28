@@ -19,6 +19,15 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
             return Configure<TChaincode>(args, null);
         }
 
+        /// <summary>
+        /// Configures the .NET Core dependency injection to use the given <see cref="TChaincode"/> as chaincode
+        /// for starting up the Chaincode shim.
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
+        /// <param name="setup">Optional setup action to add own services to the dependency collection to be used in
+        /// the chaincode implementation.</param>
+        /// <typeparam name="TChaincode">An implementation of <see cref="IChaincode"/>.</typeparam>
+        /// <returns></returns>
         public static ServiceProvider Configure<TChaincode>(string[] args, Action<ServiceCollection> setup)
             where TChaincode : class, IChaincode
         {

@@ -17,6 +17,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler.Iterators;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
 {
+    /// <inheritdoc />
     public class ChaincodeStubFactory : IChaincodeStubFactory
     {
         private readonly IServiceProvider _serviceProvider;
@@ -42,6 +43,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
         }
     }
 
+    /// <inheritdoc />
     public class ChaincodeStub : IChaincodeStub
     {
         private const char EmptyKeySubstitute = '\x01';
@@ -121,7 +123,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
             return _handler.HandleGetHistoryForKey(key, ChannelId, TxId);
         }
 
-        public Task InvokeChaincode(string chaincodeName, IEnumerable<ByteString> args, string channel = "")
+        public Task<Response> InvokeChaincode(string chaincodeName, IEnumerable<ByteString> args, string channel = "")
         {
             if (!string.IsNullOrEmpty(channel)) chaincodeName = $"{chaincodeName}/{channel}";
 

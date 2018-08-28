@@ -3,6 +3,7 @@ using Protos;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
 {
+    /// <inheritdoc />
     public class ChaincodeSupportClientFactory : IChaincodeSupportClientFactory
     {
         public ChaincodeSupport.ChaincodeSupportClient Create(Channel channel)

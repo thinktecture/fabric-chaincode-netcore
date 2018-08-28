@@ -7,7 +7,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
     public static class ChaincodeFunctionParameterInformationExtensions
     {
         /// <summary>
-        ///     Returns the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
+        /// Returns the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
         /// </summary>
         /// <param name="info">An instance of <see cref="ChaincodeFunctionParameterInformation" /></param>
         /// <param name="index">The numeric index to get.</param>
@@ -19,7 +19,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
         }
 
         /// <summary>
-        ///     Returns the given <paramref name="index" /> converted to <see cref="T" />.
+        /// Returns the given <paramref name="index" /> converted to <see cref="T" />.
         /// </summary>
         /// <param name="parameters">An instance of <see cref="Parameters" /></param>
         /// <param name="index">The numeric index to get.</param>
@@ -42,7 +42,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
         }
 
         /// <summary>
-        ///     Tries to return the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
+        /// Tries to return the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
         /// </summary>
         /// <param name="info">An instance of <see cref="ChaincodeFunctionParameterInformation" /></param>
         /// <param name="index">The numeric index to get.</param>
@@ -59,7 +59,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
         }
 
         /// <summary>
-        ///     Tries to return the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
+        /// Tries to return the given <see cref="Parameters" /> <paramref name="index" /> converted to <see cref="T" />.
         /// </summary>
         /// <param name="parameters">An instance of <see cref="Parameters" /></param>
         /// <param name="index">The numeric index to get.</param>
