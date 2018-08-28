@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,11 +16,19 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
         public static ServiceProvider Configure<TChaincode>(string[] args)
             where TChaincode : class, IChaincode
         {
+            return Configure<TChaincode>(args, null);
+        }
+
+        public static ServiceProvider Configure<TChaincode>(string[] args, Action<ServiceCollection> setup)
+            where TChaincode : class, IChaincode
+        {
             var serviceCollection = new ServiceCollection();
 
             ConfigureLogging(serviceCollection);
             ConfigureSettings(serviceCollection, args);
             ConfigureServices<TChaincode>(serviceCollection);
+
+            setup?.Invoke(serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
         }
