@@ -13,6 +13,11 @@ using Thinktecture.IO;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
 {
+    /// <summary>
+    /// The shim class provides the service to register the chaincode with the target peer, and
+    /// listen for incoming requests from the peer to dispatch to the chaincode in order to process
+    /// transaction proposals or execute queries.
+    /// </summary>
     public class Shim
     {
         private readonly ChaincodeSettings _chaincodeSettings;
@@ -35,6 +40,13 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             if (_chaincodeSettings.LogGrpc) GrpcEnvironment.SetLogger(new ConsoleLogger());
         }
 
+        /// <summary>
+        /// Call this method to start the chaincode process. After constructing a chaincode object,
+        /// pass the object to this function which will initiate a request to register the chaincode
+        /// with the target peer. The address of the target peer must be provided via a environment 
+        /// variable <code>CORE_PEER_ADDRESS</code> or program argument <code>--core-peer-address</code>.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IHandler> Start()
         {
             var url = ParseUrl(_chaincodeSettings.PeerAddress);
@@ -108,11 +120,21 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             return (split[0], int.Parse(split[1]));
         }
 
+        /// <summary>
+        /// Returns an empty standard response object with status code 200.
+        /// </summary>
+        /// <returns>The response to be sent back to HLF.</returns>
         public static Response Success()
         {
             return Success(ByteString.Empty);
         }
 
+        /// <summary>
+        /// Returns a standard response object with status code 200 and a <paramref name="payload"/>
+        /// </summary>
+        /// <param name="payload">The payload to be send with the response, can be any content the chaincode wish
+        /// to return to the client.</param>
+        /// <returns>The response to be sent back to HLF.</returns>
         public static Response Success(ByteString payload)
         {
             return new Response
@@ -122,6 +144,11 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             };
         }
 
+        /// <summary>
+        /// Returns a standard response object with status code 500 and a message.
+        /// </summary>
+        /// <param name="message">The message to be sent back to the client.</param>
+        /// <returns>The response to be sent back to HLF.</returns>
         public static Response Error(string message)
         {
             return new Response
@@ -131,6 +158,11 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
             };
         }
 
+        /// <summary>
+        /// Returns a standard response object with status code 500 and an exception.
+        /// </summary>
+        /// <param name="exception">The exception to be sent back to the client.</param>
+        /// <returns>The response to be sent back to HLF.</returns>
         public static Response Error(Exception exception)
         {
             return Error(exception.ToString());

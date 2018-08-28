@@ -3,6 +3,7 @@ using Queryresult;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler.Iterators
 {
+    /// <inheritdoc />
     public class HistoryQueryIterator : CommonIterator<KeyModification>
     {
         public HistoryQueryIterator(IHandler handler, string channelId, string txId, QueryResponse response)

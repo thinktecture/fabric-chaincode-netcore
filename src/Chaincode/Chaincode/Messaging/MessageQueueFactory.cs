@@ -5,6 +5,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Messaging
 {
+    /// <inheritdoc />
     public class MessageQueueFactory : IMessageQueueFactory
     {
         private readonly IServiceProvider _serviceProvider;

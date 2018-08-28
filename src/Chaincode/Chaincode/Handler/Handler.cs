@@ -15,6 +15,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
 {
+    /// <inheritdoc />
     public class Handler : IHandler
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();

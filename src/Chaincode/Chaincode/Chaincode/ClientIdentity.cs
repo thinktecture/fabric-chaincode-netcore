@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
 {
+    /// <inheritdoc />
     public class ClientIdentity : IClientIdentity
     {
         private const string FabricCertAttrOid = "1.2.3.4.5.6.7.8.1";
