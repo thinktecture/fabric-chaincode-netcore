@@ -26,7 +26,7 @@ If you implemented `IChaincode` you are using the low level API giving you full 
 
 For more samples, please take a look at [examples](#samples).
 
-#### Startup (C# Language Level >= 7.3)
+#### Startup (C# Language Level >= 7.0)
 
 ```csharp
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ namespace AssetHolding
 }
 ```
 
-#### Startup (C# Language Level <= 7.3)
+#### Startup (C# Language Level < 7.1)
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
