@@ -80,7 +80,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
 
             var result = new ChaincodeFunctionParameterInformation
             {
-                Function = Args.First().ToLower()
+                Function = Args.First()
                 // TODO: For usage later wrap this into a class and provide nice methods for access
             };
 
