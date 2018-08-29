@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Chaincode\Chaincode.csproj"/>
-        <ProjectReference Include="..\Chaincode.Protos\Chaincode.Protos.csproj" PrivateAssets="all"/>
+        <ProjectReference Include="..\Chaincode\Chaincode.csproj" />
+        <ProjectReference Include="..\Chaincode.Protos\Chaincode.Protos.csproj" PrivateAssets="all" />
     </ItemGroup>
 </Project>
