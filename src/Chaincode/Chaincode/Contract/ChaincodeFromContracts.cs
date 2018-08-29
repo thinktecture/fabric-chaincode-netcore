@@ -162,12 +162,18 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
                         $"Expected {dynamicMethodInvocation.ParameterCount - 1} parameters, but got {functionAndParameters.Parameters.Count}");
                 }
 
+                _logger.LogDebug($"Start \"BeforeInvocation\" for {functionAndParameters.Function}");
                 context = chaincodeContract.Contract.BeforeInvocation(context);
+                _logger.LogDebug($"End \"BeforeInvocation\" for {functionAndParameters.Function}");
 
+                _logger.LogDebug($"Start chaincode invocation for {functionAndParameters.Function}");
                 var result =
                     await dynamicMethodInvocation.Delegate(context, functionAndParameters.Parameters.ToArray());
+                _logger.LogDebug($"End chaincode invocation for {functionAndParameters.Function}");
 
+                _logger.LogDebug($"Start \"AfterInvocation\" for {functionAndParameters.Function}");
                 chaincodeContract.Contract.AfterInvocation(context, result);
+                _logger.LogDebug($"End \"AfterInvocation\" for {functionAndParameters.Function}");
 
                 return Shim.Success(result);
             }
