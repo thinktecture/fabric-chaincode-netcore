@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <LangVersion>7.3</LangVersion>
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.DevelopmentSample</AssemblyName>
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.DevelopmentSample</RootNamespace>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Chaincode\Chaincode.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.Protos", "Chainco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.Test", "Chaincode.Test\Chaincode.Test.csproj", "{40046F67-B568-4AA4-A58E-65BF4423AE20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaincode.DevelopmentSample", "Chaincode.DevelopmentSample\Chaincode.DevelopmentSample.csproj", "{A91A315B-D94D-4770-9AD8-25EA842CB1CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{40046F67-B568-4AA4-A58E-65BF4423AE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40046F67-B568-4AA4-A58E-65BF4423AE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40046F67-B568-4AA4-A58E-65BF4423AE20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A91A315B-D94D-4770-9AD8-25EA842CB1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91A315B-D94D-4770-9AD8-25EA842CB1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A91A315B-D94D-4770-9AD8-25EA842CB1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A91A315B-D94D-4770-9AD8-25EA842CB1CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
