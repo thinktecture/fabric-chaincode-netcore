@@ -581,7 +581,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
         }
 
         [Fact]
-        public async void Close_stops_the_long_running_chat_method()
+        public async Task Close_stops_the_long_running_chat_method()
         {
             var handler = CreateValidHandler();
 
