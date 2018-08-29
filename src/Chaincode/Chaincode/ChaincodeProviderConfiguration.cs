@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
+using Thinktecture.HyperledgerFabric.Chaincode.Contract;
 using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 using Thinktecture.HyperledgerFabric.Chaincode.Settings;
@@ -13,6 +16,58 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
 {
     public static class ChaincodeProviderConfiguration
     {
+        public static ServiceProvider ConfigureWithContracts<TContract>(string[] args)
+            where TContract : class, IContract
+        {
+            return ConfigureWithContracts(args, new[] {typeof(TContract)});
+        }
+
+        public static ServiceProvider ConfigureWithContracts<TContract, TContract2>(string[] args)
+            where TContract : class, IContract
+            where TContract2 : class, IContract
+        {
+            return ConfigureWithContracts(args, new[] {typeof(TContract), typeof(TContract2)});
+        }
+
+        public static ServiceProvider ConfigureWithContracts<TContract, TContract2, TContract3>(string[] args)
+            where TContract : class, IContract
+            where TContract2 : class, IContract
+            where TContract3 : class, IContract
+        {
+            return ConfigureWithContracts(args, new[] {typeof(TContract), typeof(TContract2), typeof(TContract3)});
+        }
+
+        public static ServiceProvider ConfigureWithContracts<TContract, TContract2, TContract3, TContract4>(
+            string[] args
+        )
+            where TContract : class, IContract
+            where TContract2 : class, IContract
+            where TContract3 : class, IContract
+            where TContract4 : class, IContract
+        {
+            return ConfigureWithContracts(args,
+                new[] {typeof(TContract), typeof(TContract2), typeof(TContract3), typeof(TContract4)});
+        }
+
+        public static ServiceProvider ConfigureWithContracts(string[] args, IEnumerable<Type> contracts)
+        {
+            return Configure<ChaincodeFromContracts>(args, serviceCollection =>
+            {
+                serviceCollection.AddSingleton<IContract, MetaContract>();
+                serviceCollection.AddSingleton<IContractContextFactory, ContractContextFactory>();
+
+                foreach (var contract in contracts)
+                {
+                    if (!contract.GetInterfaces().Contains(typeof(IContract)))
+                    {
+                        throw new Exception($"{contract.Name} does not implement Interface IContract");
+                    }
+
+                    serviceCollection.AddSingleton(typeof(IContract), contract);
+                }
+            });
+        }
+
         public static ServiceProvider Configure<TChaincode>(string[] args)
             where TChaincode : class, IChaincode
         {
@@ -53,6 +108,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
             serviceCollection.AddSingleton<IMessageQueueFactory, MessageQueueFactory>();
             serviceCollection.AddSingleton<IChaincodeSupportClientFactory, ChaincodeSupportClientFactory>();
             serviceCollection.AddSingleton<IFile, FileAdapter>();
+            serviceCollection.AddSingleton<IClientIdentityFactory, ClientIdentityFactory>();
         }
 
         private static void ConfigureSettings(ServiceCollection serviceCollection, string[] args)
