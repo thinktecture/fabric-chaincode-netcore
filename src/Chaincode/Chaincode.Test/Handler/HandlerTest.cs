@@ -591,7 +591,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
 
             task.Awaiting(t => task)
                 .Should()
-                .Throw<TaskCanceledException>();
+                .Throw<OperationCanceledException>();
 
             task.IsCanceled.Should().BeTrue();
         }
