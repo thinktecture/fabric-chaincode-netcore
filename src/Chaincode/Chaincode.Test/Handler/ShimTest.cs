@@ -127,7 +127,10 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
         {
             var options = Options.Create(new ChaincodeSettings()
             {
-                CORE_PEER_TLS_ROOTCERT_FILE = "foobar"
+                CORE_PEER_ADDRESS = "example.test:8080",
+                CORE_PEER_TLS_ROOTCERT_FILE = "foobar",
+                CORE_TLS_CLIENT_KEY_PATH = "foobar",
+                CORE_TLS_CLIENT_CERT_PATH = "foobar"
             });
 
             var fileMock = new Mock<IFile>();
@@ -144,7 +147,10 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
         {
             var options = Options.Create(new ChaincodeSettings()
             {
-                CORE_TLS_CLIENT_KEY_PATH = "foobar"
+                CORE_PEER_ADDRESS = "example.test:8080",
+                CORE_PEER_TLS_ROOTCERT_FILE = "foobar",
+                CORE_TLS_CLIENT_KEY_PATH = "foobar",
+                CORE_TLS_CLIENT_CERT_PATH = "foobar"
             });
 
             var fileMock = new Mock<IFile>();
@@ -163,6 +169,9 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
         {
             var options = Options.Create(new ChaincodeSettings()
             {
+                CORE_PEER_ADDRESS = "example.test:8080",
+                CORE_PEER_TLS_ROOTCERT_FILE = "foobar",
+                CORE_TLS_CLIENT_KEY_PATH = "foobar",
                 CORE_TLS_CLIENT_CERT_PATH = "foobar"
             });
 
