@@ -103,7 +103,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
             var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object, null);
 
             shim.Awaiting(m => m.Start())
-                .Should().Throw<Exception>("Peer Address should not contain any protocol information.");
+                .Should().Throw<Exception>()
+                .WithMessage("Peer Address should not contain any protocol information.");
         }
 
         [Fact]
@@ -117,7 +118,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
             var shim = new Shim(options, new Mock<ILogger<Shim>>().Object, new Mock<IHandlerFactory>().Object, null);
 
             shim.Awaiting(m => m.Start())
-                .Should().Throw<Exception>("Please provide peer address in the format of host:port");
+                .Should().Throw<Exception>()
+                .WithMessage("Please provide peer address in the format of host:port");
         }
 
         [Fact]
@@ -133,7 +135,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
             
             var shim = new Shim(options, null, null, fileMock.Object);
             shim.Awaiting(m => m.Start())
-                .Should().Throw<Exception>("Could not locate file for environment variable CORE_PEER_TLS_ROOTCERT_FILE");
+                .Should().Throw<Exception>()
+                .WithMessage("Could not locate file for environment variable CORE_PEER_TLS_ROOTCERT_FILE");
         }
         
         [Fact]
@@ -151,7 +154,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
             
             var shim = new Shim(options, null, null, fileMock.Object);
             shim.Awaiting(m => m.Start())
-                .Should().Throw<Exception>("Could not locate file for environment variable CORE_TLS_CLIENT_KEY_PATH");
+                .Should().Throw<Exception>()
+                .WithMessage("Could not locate file for environment variable CORE_TLS_CLIENT_KEY_PATH");
         }
         
         [Fact]
@@ -170,7 +174,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
             
             var shim = new Shim(options, null, null, fileMock.Object);
             shim.Awaiting(m => m.Start())
-                .Should().Throw<Exception>("Could not locate file for environment variable CORE_TLS_CLIENT_CERT_PATH");
+                .Should().Throw<Exception>()
+                .WithMessage("Could not locate file for environment variable CORE_TLS_CLIENT_CERT_PATH");
         }
     }
 }

@@ -184,7 +184,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
         {
             var sut = CreateValidChaincodeStub();
             Action act = () => sut.CreateCompositeKey(string.Empty, null);
-            act.Should().Throw<Exception>("objectType or attribute not a non-zero length string");
+            act.Should().Throw<Exception>()
+                .WithMessage("objectType or attribute not a non-zero length string");
         }
 
         [Fact]
@@ -192,7 +193,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
         {
             var sut = CreateValidChaincodeStub();
             Action act = () => sut.CreateCompositeKey(null, null);
-            act.Should().Throw<Exception>("objectType or attribute not a non-zero length string");
+            act.Should().Throw<Exception>()
+                .WithMessage("objectType or attribute not a non-zero length string");
         }
 
         [Fact]
@@ -226,7 +228,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
             var sut = CreateValidChaincodeStub();
 
             sut.Invoking(s => s.DeletePrivateData(string.Empty, "key"))
-                .Should().Throw<Exception>("collection must be a valid string");
+                .Should().Throw<Exception>()
+                .WithMessage("collection must be a valid string");
         }
 
         [Fact]
@@ -285,7 +288,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
             var sut = CreateValidChaincodeStub();
 
             sut.Invoking(s => s.GetPrivateData(string.Empty, "key"))
-                .Should().Throw<Exception>("collection must be a valid string");
+                .Should().Throw<Exception>()
+                .WithMessage("collection must be a valid string");
         }
 
         [Fact]
@@ -576,7 +580,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
             var sut = CreateValidChaincodeStub();
 
             sut.Invoking(s => s.PutPrivateData(string.Empty, "key", "value".ToByteString()))
-                .Should().Throw<Exception>("collection must be a valid string");
+                .Should().Throw<Exception>()
+                .WithMessage("collection must be a valid string");
         }
 
         [Fact]
