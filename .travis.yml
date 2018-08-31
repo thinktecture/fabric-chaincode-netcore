@@ -7,8 +7,8 @@ os: osx
 script:
   - dotnet tool install -g coveralls.net
   - dotnet build src/Chaincode/Chaincode/Chaincode.csproj --configuration Release
-  - dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release
-  - $HOME/.dotnet/tools/csmacnz.Coveralls --opencover -i ./coverage.opencover.xml --useRelativePaths --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID
+  - dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release /p:CollectCoverage=true /p:Exclude="[Chaincode.Protos]*" /p:CoverletOutputFormat=opencover /p:CoverletOutput="../../../"
+  - $HOME/.dotnet/tools/csmacnz.Coveralls --opencover -i ./coverage.opencover.xml --useRelativePaths --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$(git log -1 $TRAVIS_COMMIT --pretty=\"%aN\")" --commitEmail "$(git log -1 $TRAVIS_COMMIT --pretty=\"%cE\")" --commitMessage "$TRAVIS_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID
 deploy:
   - provider: script
     script: bash .deploy.sh
