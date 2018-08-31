@@ -1,11 +1,11 @@
 
 [![Master Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore.svg?label=master)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 [![NuGet Release](https://img.shields.io/nuget/v/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
-[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=master)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=master)
 
 [![Develop Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore/develop.svg?label=develop)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20pre-release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
-[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=develop)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=develop)
 
 
 # Thinktecture Hyperledger Fabric Chaincode .NET Adapter
