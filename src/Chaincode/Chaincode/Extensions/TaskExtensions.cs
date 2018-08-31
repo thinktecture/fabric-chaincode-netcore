@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
@@ -9,6 +10,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
         /// </summary>
         /// <param name="task">The task to invoke.</param>
         /// <returns>Returns true, if the task invocation was successful.</returns>
+        [ExcludeFromCodeCoverage]
         public static async Task<bool> InvokeSafe(this Task task)
         {
             try
