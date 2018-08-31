@@ -13,6 +13,9 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
 {
+    /// <summary>
+    /// Constructs a chaincode based on one to multiple <see cref="IContract"/>.
+    /// </summary>
     public class ChaincodeFromContracts : IChaincode
     {
         private delegate Task<ByteString> DynamicMethodInvocationDelegate(
@@ -68,51 +71,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
                     Namespace = contract.Namespace,
                     Contract = contract,
                     ContractType = contract.GetType(),
-                    Functions = contract.GetType()
-                        .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                        .Where(m => m.ReturnType ==
-                                    typeof(Task<ByteString>
-                                    )) // for easier calling we only take a Task<ByteString> for now
-                        .ToDictionary(key => key.Name, element =>
-                        {
-                            var contractContextExpressionParameter = Expression.Parameter(typeof(IContractContext));
-                            var stringArrayExpressionParameter = Expression.Parameter(typeof(string[]));
-
-                            var lambdaParameters = new[]
-                            {
-                                contractContextExpressionParameter,
-                                stringArrayExpressionParameter,
-                            };
-
-                            var methodPositionalStringExpressionParameters = element.GetParameters()
-                                .Skip(1) // skips the IContractContext
-                                .Select((p, index) =>
-                                    Expression.ArrayIndex(stringArrayExpressionParameter, Expression.Constant(index)))
-                                .Cast<Expression>();
-
-                            var parameters = new[]
-                                {
-                                    contractContextExpressionParameter
-                                }
-                                .Concat(methodPositionalStringExpressionParameters);
-
-                            var callExpression = Expression.Call(
-                                Expression.Constant(contract),
-                                element,
-                                parameters
-                            );
-
-                            var compiledCall = Expression.Lambda<DynamicMethodInvocationDelegate>(
-                                // (context, string[]) => functionName(context, string...) 
-                                callExpression, lambdaParameters
-                            ).Compile();
-
-                            return new DynamicMethodInvocation()
-                            {
-                                Delegate = compiledCall,
-                                ParameterCount = element.GetParameters().Length
-                            };
-                        })
+                    Functions = GetContractFunctions(contract)
                 };
 
                 if (chaincodeContract.Functions.Count == 0)
@@ -125,11 +84,59 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
             }
         }
 
+        private Dictionary<string, DynamicMethodInvocation> GetContractFunctions(IContract contract)
+        {
+            return contract.GetType()
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Where(m => m.ReturnType ==
+                            typeof(Task<ByteString>
+                            )) // for easier calling we only take a Task<ByteString> for now
+                .ToDictionary(key => key.Name, element =>
+                {
+                    var contractContextExpressionParameter = Expression.Parameter(typeof(IContractContext));
+                    var stringArrayExpressionParameter = Expression.Parameter(typeof(string[]));
+
+                    var lambdaParameters = new[]
+                    {
+                        contractContextExpressionParameter,
+                        stringArrayExpressionParameter,
+                    };
+
+                    var methodPositionalStringExpressionParameters = element.GetParameters()
+                        .Skip(1) // skips the IContractContext
+                        .Select((p, index) =>
+                            Expression.ArrayIndex(stringArrayExpressionParameter, Expression.Constant(index)))
+                        .Cast<Expression>();
+
+                    var parameters = new[] {contractContextExpressionParameter}
+                        .Concat(methodPositionalStringExpressionParameters);
+
+                    var callExpression = Expression.Call(
+                        Expression.Constant(contract),
+                        element,
+                        parameters
+                    );
+
+                    var compiledCall = Expression.Lambda<DynamicMethodInvocationDelegate>(
+                        // (context, string[]) => functionName(context, string...) 
+                        callExpression, lambdaParameters
+                    ).Compile();
+
+                    return new DynamicMethodInvocation()
+                    {
+                        Delegate = compiledCall,
+                        ParameterCount = element.GetParameters().Length
+                    };
+                });
+        }
+
+        /// <inheritdoc />
         public Task<Response> Init(IChaincodeStub stub)
         {
             return Invoke(stub);
         }
 
+        /// <inheritdoc />
         public async Task<Response> Invoke(IChaincodeStub stub)
         {
             try

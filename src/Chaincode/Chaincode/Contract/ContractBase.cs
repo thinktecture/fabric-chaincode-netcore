@@ -5,6 +5,9 @@ using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
 {
+    /// <summary>
+    /// Recommended base class to build custom contracts.
+    /// </summary>
     public abstract class ContractBase : IContract
     {
         public virtual IContractContext BeforeInvocation(IContractContext context)
