@@ -581,7 +581,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
         }
 
         [Fact]
-        public async Task Close_stops_the_long_running_chat_method()
+        public void Close_stops_the_long_running_chat_method()
         {
             var handler = CreateValidHandler();
 
@@ -589,9 +589,11 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
 
             handler.Close();
 
-            await task;
+            task.Awaiting(t => task)
+                .Should()
+                .Throw<TaskCanceledException>();
 
-            task.IsCompleted.Should().BeTrue();
+            task.IsCanceled.Should().BeTrue();
         }
 
         [Fact]

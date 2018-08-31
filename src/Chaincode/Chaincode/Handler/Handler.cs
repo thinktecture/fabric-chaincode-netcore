@@ -152,7 +152,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
                     }
                 }
 
-                _logger.LogCritical("Chaincode ended??");
+                _cancellationTokenSource.Token.ThrowIfCancellationRequested();
             }, _cancellationTokenSource.Token);
         }
 
