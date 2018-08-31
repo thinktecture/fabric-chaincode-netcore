@@ -4,11 +4,14 @@ dotnet: 2.1.302
 # Travis only supports Ubuntu 14 which has a very old openversion from 2014. 
 # Updating the package was not possible due to a dependency error at postgres-client.
 os: osx
+before_script:
+  - export COMMITTER_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
+  - export AUTHOR_NAME="$(git log -1 $TRAVIS_COMMIT --pretty="%aN")"
 script:
   - dotnet tool install -g coveralls.net
   - dotnet build src/Chaincode/Chaincode/Chaincode.csproj --configuration Release
   - dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release /p:CollectCoverage=true /p:Exclude="[Chaincode.Protos]*" /p:CoverletOutputFormat=opencover /p:CoverletOutput="../../../"
-  - $HOME/.dotnet/tools/csmacnz.Coveralls --opencover -i ./coverage.opencover.xml --useRelativePaths --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$(git log -1 $TRAVIS_COMMIT --pretty=\"%aN\")" --commitEmail "$(git log -1 $TRAVIS_COMMIT --pretty=\"%cE\")" --commitMessage "$TRAVIS_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID
+  - $HOME/.dotnet/tools/csmacnz.Coveralls --opencover -i ./coverage.opencover.xml --useRelativePaths --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$AUTHOR_NAME" --commitEmail "$COMMITTER_EMAIL" --commitMessage "$TRAVIS_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID
 deploy:
   - provider: script
     script: bash .deploy.sh
