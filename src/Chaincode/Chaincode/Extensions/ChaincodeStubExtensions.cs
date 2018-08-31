@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
@@ -7,6 +8,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
     /// <summary>
     /// Contains methods for an easier usage of the low level API.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class ChaincodeStubExtensions
     {
         /// <summary>
