@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
 {
+    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public class ContractContextFactory : IContractContextFactory
     {
         private readonly IClientIdentityFactory _clientIdentityFactory;

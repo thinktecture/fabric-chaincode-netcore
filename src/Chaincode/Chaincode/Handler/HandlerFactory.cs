@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 namespace Thinktecture.HyperledgerFabric.Chaincode.Handler
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public class HandlerFactory : IHandlerFactory
     {
         private readonly IServiceProvider _serviceProvider;

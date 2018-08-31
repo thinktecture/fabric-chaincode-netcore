@@ -7,7 +7,6 @@ using Common;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Msp;
 using Protos;
@@ -17,32 +16,6 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler.Iterators;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
 {
-    /// <inheritdoc />
-    public class ChaincodeStubFactory : IChaincodeStubFactory
-    {
-        private readonly IServiceProvider _serviceProvider;
-
-        public ChaincodeStubFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
-        public IChaincodeStub Create(
-            IHandler handler,
-            string channelId,
-            string txId,
-            ChaincodeInput chaincodeInput,
-            SignedProposal signedProposal
-        )
-        {
-            using (var scope = _serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                return new ChaincodeStub(handler, channelId, txId, chaincodeInput, signedProposal,
-                    scope.ServiceProvider.GetRequiredService<ILogger<ChaincodeStub>>());
-            }
-        }
-    }
-
     /// <inheritdoc />
     public class ChaincodeStub : IChaincodeStub
     {
