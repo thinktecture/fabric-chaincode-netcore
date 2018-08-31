@@ -158,4 +158,11 @@ In order to build the source folder, please follow the steps:
 
 ### Testing
 
-TODO
+The library uses xUnit to unit test most of the code. 
+A coverage of 80 % should tried to be achieved. 
+For the coverage, [coverlet](https://github.com/tonerdo/coverlet) is used.
+To test for coverage locally, execute:
+
+```bash
+dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release /p:CollectCoverage=true /p:Exclude="[Chaincode.Protos]*"
+```

@@ -5,8 +5,10 @@ dotnet: 2.1.302
 # Updating the package was not possible due to a dependency error at postgres-client.
 os: osx
 script:
+  - dotnet tool install -g coveralls.net
   - dotnet build src/Chaincode/Chaincode/Chaincode.csproj --configuration Release
   - dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release
+  - $HOME/.dotnet/tools/csmacnz.Coveralls --opencover -i ./coverage.opencover.xml 
 deploy:
   - provider: script
     script: bash .deploy.sh
