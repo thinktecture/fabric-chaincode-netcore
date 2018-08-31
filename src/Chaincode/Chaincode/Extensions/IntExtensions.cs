@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Google.Protobuf;
 
 namespace Thinktecture.HyperledgerFabric.Chaincode.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class IntExtensions
     {
         /// <summary>
