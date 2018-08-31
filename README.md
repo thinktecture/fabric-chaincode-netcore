@@ -1,8 +1,11 @@
 
 [![Master Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore.svg?label=master)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 [![NuGet Release](https://img.shields.io/nuget/v/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
+[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=master)
+
 [![Develop Build](https://img.shields.io/travis/thinktecture/fabric-chaincode-netcore/develop.svg?label=develop)](https://travis-ci.org/thinktecture/fabric-chaincode-netcore)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/Thinktecture.HyperledgerFabric.Chaincode.svg?label=nuget%20pre-release)](https://www.nuget.org/packages/Thinktecture.HyperledgerFabric.Chaincode/)
+[![Coverage Status](https://coveralls.io/repos/github/thinktecture/fabric-chaincode-netcore/badge.svg?branch=)](https://coveralls.io/github/thinktecture/fabric-chaincode-netcore?branch=develop)
 
 
 # Thinktecture Hyperledger Fabric Chaincode .NET Adapter
@@ -164,5 +167,5 @@ For the coverage, [coverlet](https://github.com/tonerdo/coverlet) is used.
 To test for coverage locally, execute:
 
 ```bash
-dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release /p:CollectCoverage=true /p:Exclude="[Chaincode.Protos]*"
+dotnet test src/Chaincode/Chaincode.Test/Chaincode.Test.csproj --configuration Release /p:CollectCoverage=true /p:Exclude="[Chaincode.Protos]*" /p:CoverletOutputFormat=opencover
 ```
