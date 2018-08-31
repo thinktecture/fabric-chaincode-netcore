@@ -15,7 +15,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 using Thinktecture.HyperledgerFabric.Chaincode.Handler.Iterators;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
 {
     public class ChaincodeStubTest
     {

@@ -2,8 +2,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
         <IsPackable>false</IsPackable>
-        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.Sample</AssemblyName>
-        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.Sample</RootNamespace>
+        <AssemblyName>Thinktecture.HyperledgerFabric.Chaincode.Test</AssemblyName>
+        <RootNamespace>Thinktecture.HyperledgerFabric.Chaincode.Test</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

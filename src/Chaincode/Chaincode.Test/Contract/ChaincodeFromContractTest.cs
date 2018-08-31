@@ -10,7 +10,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Contract;
 using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Contract
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
 {
     public class ChaincodeFromContractTest
     {

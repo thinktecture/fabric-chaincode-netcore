@@ -5,7 +5,7 @@ using Protos;
 using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Messaging
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Messaging
 {
     public class QueueMessageTest
     {

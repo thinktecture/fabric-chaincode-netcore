@@ -15,7 +15,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Messaging;
 using Xunit;
 using Metadata = Grpc.Core.Metadata;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
 {
     public class HandlerTest
     {

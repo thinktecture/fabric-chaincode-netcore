@@ -6,7 +6,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Chaincode;
 using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Chaincode
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Chaincode
 {
     public class ClientIdentityTest
     {

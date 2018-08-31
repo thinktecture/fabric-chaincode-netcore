@@ -2,7 +2,7 @@ using FluentAssertions;
 using Thinktecture.HyperledgerFabric.Chaincode.Settings;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Settings
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Settings
 {
     public class ChaincodeSettingsTest
     {

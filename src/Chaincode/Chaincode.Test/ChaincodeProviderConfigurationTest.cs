@@ -4,7 +4,7 @@ using FluentAssertions;
 using Thinktecture.HyperledgerFabric.Chaincode.Contract;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test
 {
     public class ChaincodeProviderConfigurationTest
     {

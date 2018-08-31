@@ -15,7 +15,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Settings;
 using Thinktecture.IO;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
 {
     public class ShimTest
     {

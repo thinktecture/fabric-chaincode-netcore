@@ -9,7 +9,7 @@ using Thinktecture.HyperledgerFabric.Chaincode.Handler;
 using Thinktecture.HyperledgerFabric.Chaincode.Handler.Iterators;
 using Xunit;
 
-namespace Thinktecture.HyperledgerFabric.Chaincode.Sample.Handler
+namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
 {
     // All tests are done with StateQueryIterator, since they apply to the HistoryQueryIterator as well
     public class IteratorTest
