@@ -583,11 +583,36 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Handler
         [Fact]
         public void Close_stops_the_long_running_chat_method()
         {
-            var handler = CreateValidHandler();
+            var responseStreamMockReturnValue = true; 
+            var responseStreamMock = new Mock<IAsyncStreamReader<ChaincodeMessage>>();
+            responseStreamMock.Setup(m => m.MoveNext(It.IsAny<CancellationToken>()))
+                // ReSharper disable once AccessToModifiedClosure
+                .Returns(() => Task.FromResult(responseStreamMockReturnValue));
+            responseStreamMock.Setup(m => m.Current)
+                .Returns(new ChaincodeMessage());
+
+            var asyncDuplexStream = new AsyncDuplexStreamingCall<ChaincodeMessage, ChaincodeMessage>(
+                new Mock<IClientStreamWriter<ChaincodeMessage>>().Object,
+                responseStreamMock.Object,
+                null, null, null, null
+            );
+
+            var chaincodeSupportClientMock = new Mock<ChaincodeSupport.ChaincodeSupportClient>();
+            chaincodeSupportClientMock.Setup(m => m.Register(null, null, It.IsAny<CancellationToken>()))
+                .Returns(asyncDuplexStream);
+
+            var chaincodeSupportClientFactoryMock = new Mock<IChaincodeSupportClientFactory>();
+            chaincodeSupportClientFactoryMock.Setup(m => m.Create(It.IsAny<Channel>()))
+                .Returns(chaincodeSupportClientMock.Object);
+
+            var handler = CreateHandler(new Mock<IMessageQueueFactory>().Object,
+                chaincodeSupportClientFactoryMock.Object, new Mock<IChaincodeStubFactory>().Object, new Mock<IChaincode>().Object);
 
             var task = handler.Chat(new ChaincodeMessage());
-
+            
             handler.Close();
+            // TODO: Possible refactoring in Handler.cs to not have access to a modified closure here
+            responseStreamMockReturnValue = false; // Let's simulate a token source cancellation since we have no access
 
             task.Awaiting(t => task)
                 .Should()
