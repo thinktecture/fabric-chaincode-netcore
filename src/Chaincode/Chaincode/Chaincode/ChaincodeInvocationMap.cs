@@ -29,11 +29,6 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Chaincode
     /// </summary>
     public class ChaincodeInvocationMap : Dictionary<string, ChaincodeInvocationDelegate>
     {
-        public ChaincodeInvocationMap()
-            : base(StringComparer.OrdinalIgnoreCase)
-        {
-        }
-
         /// <summary>
         /// Invokes the actual chaincode function determined by the first argument within
         /// <see cref="IChaincodeStub.Args"/>
