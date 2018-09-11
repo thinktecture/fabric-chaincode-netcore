@@ -146,10 +146,12 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
             {
                 var functionAndParameters = stub.GetFunctionAndParameters();
 
-                var splitFunctionName = functionAndParameters.Function.Split('_');
+                var splitFunctionName = functionAndParameters.Function.Split('.').ToList();
 
-                var @namespace = splitFunctionName[0];
-                var functionName = splitFunctionName[1];
+                var functionName = splitFunctionName[splitFunctionName.Count - 1];
+                splitFunctionName.RemoveAt(splitFunctionName.Count - 1);
+                
+                var @namespace = string.Join(".", splitFunctionName);
 
                 if (!_chaincodeContracts.TryGetValue(@namespace, out var chaincodeContract))
                 {

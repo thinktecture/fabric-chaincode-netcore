@@ -65,6 +65,19 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             {
             }
         }
+        
+        private class MultipleDotsInNamespaceContract : ContractBase
+        {
+            public MultipleDotsInNamespaceContract(IDictionary<string, string> metadata = null)
+                : base("Multiple.Dots.In.Namespace.Contract", metadata)
+            {
+            }
+
+            public Task<ByteString> Foo(IContractContext context, string param1)
+            {
+                return Task.FromResult(param1.ToByteString());
+            }
+        }
 
         [Fact]
         public void Constructor_does_not_throw()
@@ -85,7 +98,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract1_Foo",
+                    Function = "SampleContract1.Foo",
                     Parameters = {"unittest"}
                 });
 
@@ -105,7 +118,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract2_Bar",
+                    Function = "SampleContract2.Bar",
                     Parameters = {"unittest", "unittest2", "unittest3"}
                 });
 
@@ -116,6 +129,26 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             var result = await sut.Invoke(chaincodeStubMock.Object);
             result.Payload.Should().Equal("unittestunittest2unittest3".ToByteString());
         }
+        
+        [Fact]
+        public async Task Invoke_invokes_the_contract_function_when_the_namespace_contains_multiple_dots()
+        {
+            var contractContextFactoryMock = new Mock<IContractContextFactory>();
+            var chaincodeStubMock = new Mock<IChaincodeStub>();
+            chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
+                .Returns(new ChaincodeFunctionParameterInformation()
+                {
+                    Function = "Multiple.Dots.In.Namespace.Contract.Foo",
+                    Parameters = {"unittest"}
+                });
+
+            var sut = new ChaincodeFromContracts(new List<IContract>() {new MultipleDotsInNamespaceContract()},
+                contractContextFactoryMock.Object, new NullLogger<ChaincodeFromContracts>()
+            );
+
+            var result = await sut.Invoke(chaincodeStubMock.Object);
+            result.Payload.Should().Equal("unittest".ToByteString());
+        }
 
         [Fact]
         public async Task Invoke_invokes_the_contract_function_but_returns_a_shim_error_when_a_parameter_is_missing()
@@ -125,7 +158,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract2_Bar",
+                    Function = "SampleContract2.Bar",
                     Parameters = {"unittest", "unittest2"}
                 });
 
@@ -147,7 +180,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract2_Bar",
+                    Function = "SampleContract2.Bar",
                     Parameters = {"unittest", "unittest2", "unittest3", "toomuchparams"}
                 });
 
@@ -168,7 +201,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "UnknownChaincode_Bar",
+                    Function = "UnknownChaincode.Bar",
                     Parameters = {"unittest"}
                 });
 
@@ -189,7 +222,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract1_Bar",
+                    Function = "SampleContract1.Bar",
                     Parameters = {"unittest"}
                 });
 
@@ -211,7 +244,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
             chaincodeStubMock.Setup(m => m.GetFunctionAndParameters())
                 .Returns(new ChaincodeFunctionParameterInformation()
                 {
-                    Function = "SampleContract3_Bar",
+                    Function = "SampleContract3.Bar",
                     Parameters = {"unittest"}
                 });
 
