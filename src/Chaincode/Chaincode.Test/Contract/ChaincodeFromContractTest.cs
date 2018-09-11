@@ -247,5 +247,25 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Test.Contract
                 .Throw<Exception>()
                 .WithMessage("Can not start Chaincode without any contracts.");
         }
+
+        [Fact]
+        public void GetContracts_returns_assigned_contracts_and_the_system_contract()
+        {
+            var sut = new ChaincodeFromContracts(new List<IContract>() { new SampleContract1() },
+                new Mock<IContractContextFactory>().Object, new NullLogger<ChaincodeFromContracts>());
+
+            var result = sut.GetContracts();
+
+            result.Count.Should().Be(2);
+            result.Keys.Should().Contain(new List<string>() { "SystemContract", "SampleContract1"});
+
+            var systemContract = result["SystemContract"];
+            systemContract.Namespace.Should().Be("org.hyperledger.fabric");
+            systemContract.FunctionNames.Should().Contain("GetMetadata");
+
+            var sampleContract1 = result["SampleContract1"];
+            sampleContract1.Namespace.Should().Be("SampleContract1");
+            sampleContract1.FunctionNames.Should().Contain("Foo");
+        }
     }
 }

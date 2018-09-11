@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
@@ -6,13 +7,16 @@ using Thinktecture.HyperledgerFabric.Chaincode.Extensions;
 namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
 {
     /// <summary>
-    /// Stub for an upcoming meta contract which will describe the actual <see cref="ChaincodeFromContracts"/>.
+    /// This is a contract that determines functions that can be invoked to provide general information.
     /// </summary>
-    public class MetaContract : ContractBase
+    public class SystemContract : ContractBase
     {
-        public MetaContract()
+        private readonly ChaincodeFromContracts _chaincodeFromContracts;
+
+        public SystemContract(ChaincodeFromContracts chaincodeFromContracts)
             : base("org.hyperledger.fabric")
         {
+            _chaincodeFromContracts = chaincodeFromContracts;
         }
 
         /// <summary>
@@ -20,9 +24,10 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
         /// </summary>
         /// <param name="context">The <see cref="IContractContext"/>.</param>
         /// <returns>meta information.</returns>
+        [ExcludeFromCodeCoverage]
         public Task<ByteString> GetMetadata(IContractContext context)
         {
-            return Task.FromResult(JsonConvert.SerializeObject(Metadata).ToByteString());
+            return Task.FromResult(JsonConvert.SerializeObject(_chaincodeFromContracts.GetContracts()).ToByteString());
         } 
     }
 }

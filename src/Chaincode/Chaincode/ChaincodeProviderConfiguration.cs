@@ -53,7 +53,6 @@ namespace Thinktecture.HyperledgerFabric.Chaincode
         {
             return Configure<ChaincodeFromContracts>(args, serviceCollection =>
             {
-                serviceCollection.AddSingleton<IContract, MetaContract>();
                 serviceCollection.AddSingleton<IContractContextFactory, ContractContextFactory>();
 
                 foreach (var contract in contracts)

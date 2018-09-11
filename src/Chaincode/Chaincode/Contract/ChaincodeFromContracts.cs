@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
@@ -52,7 +53,7 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
             _contractContextFactory = contractContextFactory;
             _logger = logger;
 
-            Initialize(contracts.ToArray());
+            Initialize(contracts.ToList());
         }
 
         private void Initialize(ICollection<IContract> contracts)
@@ -63,6 +64,8 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
             {
                 throw new Exception("Can not start Chaincode without any contracts.");
             }
+            
+            contracts.Add(new SystemContract(this));
 
             foreach (var contract in contracts)
             {
@@ -188,6 +191,16 @@ namespace Thinktecture.HyperledgerFabric.Chaincode.Contract
             {
                 return Shim.Error(e);
             }
+        }
+
+        public IDictionary<string, ChaincodeContractInformation> GetContracts()
+        {
+            return _chaincodeContracts.ToDictionary(item => item.Value.Contract.GetType().Name, item => new ChaincodeContractInformation()
+            {
+                Contract = item.Value.Contract,
+                Namespace = item.Value.Namespace,
+                FunctionNames = item.Value.Functions.Select(f => f.Key).ToList()
+            });
         }
     }
 }
