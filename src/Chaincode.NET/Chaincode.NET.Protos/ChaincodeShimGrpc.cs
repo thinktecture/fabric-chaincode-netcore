@@ -8,7 +8,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-#pragma warning disable 1591
+#pragma warning disable 0414, 1591
 #region Designer generated code
 
 using grpc = global::Grpc.Core;
@@ -22,14 +22,14 @@ namespace Chaincode.NET.Protos {
   {
     static readonly string __ServiceName = "protos.ChaincodeSupport";
 
-    static readonly grpc::Marshaller<global::Chaincode.NET.Protos.ChaincodeMessage> __Marshaller_ChaincodeMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Chaincode.NET.Protos.ChaincodeMessage.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Chaincode.NET.Protos.ChaincodeMessage> __Marshaller_protos_ChaincodeMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Chaincode.NET.Protos.ChaincodeMessage.Parser.ParseFrom);
 
     static readonly grpc::Method<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage> __Method_Register = new grpc::Method<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage>(
         grpc::MethodType.DuplexStreaming,
         __ServiceName,
         "Register",
-        __Marshaller_ChaincodeMessage,
-        __Marshaller_ChaincodeMessage);
+        __Marshaller_protos_ChaincodeMessage,
+        __Marshaller_protos_ChaincodeMessage);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -38,6 +38,7 @@ namespace Chaincode.NET.Protos {
     }
 
     /// <summary>Base class for server-side implementations of ChaincodeSupport</summary>
+    [grpc::BindServiceMethod(typeof(ChaincodeSupport), "BindService")]
     public abstract partial class ChaincodeSupportBase
     {
       public virtual global::System.Threading.Tasks.Task Register(grpc::IAsyncStreamReader<global::Chaincode.NET.Protos.ChaincodeMessage> requestStream, grpc::IServerStreamWriter<global::Chaincode.NET.Protos.ChaincodeMessage> responseStream, grpc::ServerCallContext context)
@@ -52,7 +53,7 @@ namespace Chaincode.NET.Protos {
     {
       /// <summary>Creates a new client for ChaincodeSupport</summary>
       /// <param name="channel">The channel to use to make remote calls.</param>
-      public ChaincodeSupportClient(grpc::Channel channel) : base(channel)
+      public ChaincodeSupportClient(grpc::ChannelBase channel) : base(channel)
       {
       }
       /// <summary>Creates a new client for ChaincodeSupport that uses a custom <c>CallInvoker</c>.</summary>
@@ -91,6 +92,15 @@ namespace Chaincode.NET.Protos {
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_Register, serviceImpl.Register).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, ChaincodeSupportBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_Register, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Chaincode.NET.Protos.ChaincodeMessage, global::Chaincode.NET.Protos.ChaincodeMessage>(serviceImpl.Register));
     }
 
   }

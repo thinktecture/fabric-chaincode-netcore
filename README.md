@@ -31,6 +31,7 @@ In order to build the source folder, please follow the steps:
 
 1. Open a terminal within the `Chaincode.NET` folder and run `dotnet restore` to restore all the packages
 2. Make sure, you have Golang and the proto files for Hyperledger Fabric installed: `go get github.com/hyperledger/fabric/protos` 
+   + You will also need the protobuf proto files: `go get github.com/protocolbuffers/protobuf`
 3. Run `generate_protos.sh` within the `src` folder. It will generate the C# classes for Hyperledger Fabric's Protofiles.
 4. Open the Project with JetBrains Rider (preferred) or Visual Studio
 5. Build Chaincode.NET

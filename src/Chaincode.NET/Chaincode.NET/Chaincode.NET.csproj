@@ -18,17 +18,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.Core" Version="1.11.1" />
-      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     </ItemGroup>
 
     <ItemGroup>
